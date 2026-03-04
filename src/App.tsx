@@ -69,6 +69,27 @@ type SamhwaScenario = {
   noGo: string
 }
 
+type BxSectionItem = {
+  title: string
+  what: string[]
+  how: string[]
+  evidence: string[]
+  devilCheck: string
+}
+
+type BxStepItem = {
+  step: string
+  goal: string
+  inputs: string[]
+  outputs: string[]
+  check: string
+}
+
+type BxChecklistItem = {
+  item: string
+  criterion: string
+}
+
 const samhwaNotebookUrl =
   'https://notebooklm.google.com/notebook/bef72a22-da35-42f5-b92e-6074e8ac0b6e'
 const bxNotebookUrl =
@@ -89,13 +110,13 @@ const reportCards: ReportCard[] = [
   },
   {
     id: 'bx',
-    title: 'BX컨설팅 어플라이 프로젝트 사업계획서',
-    subtitle: '창업지원사업 대응형 제안서(요건-재무-실행-리스크)',
+    title: 'BX컨설팅 창업중심대학 사업계획서',
+    subtitle: '2026 지역기반 양식 미러형 작성 가이드/실행전략',
     icon: Rocket,
     bullets: [
-      '공고 요건 적합성 체크리스트와 평가항목 대응 구조',
-      '재원 구성·매출 목표·단계별 핵심성과지표(KPI) 차트',
-      '계획안 A/B 트랙 운영전략과 실무 실행 단계 상세화',
+      '양식 목차(일반현황~조직구성) 그대로 반영한 섹션 구조',
+      '제한사항/요구사항/평가항목 대응 전략을 지시형으로 정리',
+      '협약기간(2026.5~12) 월별 마일스톤·예산 집행 프레임 시각화',
     ],
     sourceUrl: bxNotebookUrl,
   },
@@ -342,128 +363,241 @@ const samhwaSources: SourceDoc[] = [
   },
 ]
 
-const bxRevenueProjection = [
-  { year: '2026', 보수적: 11, 공격적: 18 },
-  { year: '2027', 보수적: 30, 공격적: 45 },
-  { year: '2028', 보수적: 58, 공격적: 100 },
+const bxWritingPremise = [
+  'Problem/Solution/Scale-up/Team의 연결 논리가 심사 점수의 핵심입니다.',
+  '아이디어 소개보다 문제의 크기와 해결 실현가능성을 수치로 증명해야 합니다.',
+  '협약기간 8개월(2026.5~12) 내 완료 가능한 산출물과 검증 계획을 제시해야 합니다.',
+  '예산은 항목 나열이 아니라 KPI/산출물과 1:1로 연결되어야 합니다.',
 ]
 
-const bxFundingMix = [
-  { item: '정부지원금', value: 1.0 },
-  { item: '자기부담(현금)', value: 0.15 },
-  { item: '자기부담(현물)', value: 0.28 },
+const bxExecutionPlanSteps: BxStepItem[] = [
+  {
+    step: 'Step A (1일차) 자료 수집',
+    goal: '심사 대응에 필요한 근거 팩을 빠짐없이 확보',
+    inputs: [
+      '고객/시장 팩: 타깃 고객 1장, 문제 Top3, 경쟁·대체재 정리',
+      '제품/기술 팩: 데모·프로토타입·파일럿 현황, 남은 개발항목',
+      '사업화 팩: 과금단위, CAC 가정, 세일즈 사이클, 유통 채널',
+      '실행/예산 팩: 월별 마일스톤, 집행 항목 초안',
+    ],
+    outputs: ['근거 팩 1차본', '증빙 자료 목록(MOU/LOI/인터뷰/로그)'],
+    check: '문제-해결-매출-팀을 뒷받침하는 증빙이 최소 1개 이상 연결되어야 함',
+  },
+  {
+    step: 'Step B (2~3일차) 1차 원고 작성',
+    goal: '양식 구조를 유지한 상태에서 수치 중심 원고 완성',
+    inputs: ['사업계획서 양식 원본', 'Step A 근거 팩'],
+    outputs: ['목차별 1차 원고', '표/도식 중심 10페이지 초안'],
+    check: '설명 문장 과다를 줄이고 표·숫자·완료기준 문장으로 압축했는지 점검',
+  },
+  {
+    step: 'Step C (4일차) 악마의 대변인 검증',
+    goal: '심사 질의(문제의 크기/지불의사/8개월 실행력) 대응력 확보',
+    inputs: ['1차 원고', '증빙 팩'],
+    outputs: ['취약 문장 수정본', '반박 대응 Q&A 메모'],
+    check: '모든 핵심 주장에 증빙 링크 또는 수치가 붙어 있는지 확인',
+  },
+  {
+    step: 'Step D (5일차) 최종 편집/제출',
+    goal: '제출 규격 100% 준수 상태로 최종본 확정',
+    inputs: ['검증 완료 원고', '양식 작성 규정'],
+    outputs: ['제출본 최종 PDF/HWPX', '최종 점검 체크리스트 완료'],
+    check: '목차 페이지 삭제, 파란 안내문구 삭제, 개인정보 마스킹을 최종 확인',
+  },
+]
+
+const bxFormMirrorSections: BxSectionItem[] = [
+  {
+    title: '□ 일반현황',
+    what: [
+      '기업/대표/사업자 정보와 창업아이템 정의를 양식 표 기준으로 기재',
+      '협약기간 내 산출물을 “무엇을 몇 개, 어떤 수준”까지인지 명시',
+    ],
+    how: [
+      '사업자등록증/등기부와 동일한 표기(기업명, 주소, 대표자 유형 등)',
+      '창업아이템명은 “기술+기능+고객혜택” 한 문장으로 고정',
+      '팀 구성은 역할-성과-기간 중심으로 기재하고 개인정보는 마스킹',
+    ],
+    evidence: ['사업자등록증', '법인등기', '역할별 수행 이력', '산출물 정의표(DoD)'],
+    devilCheck: '“앱 1개 개발”처럼 추상적 문구는 감점. 기능·검증범위·완료기준을 명확히 작성',
+  },
+  {
+    title: '□ 개요(요약)',
+    what: ['아이템 소개, 문제인식, 실현가능성, 성장전략, 조직구성을 1페이지에 요약'],
+    how: [
+      '한 줄 정의: 타깃/문제/핵심해결',
+      '문제 크기 수치 1개 + 협약기간 성과목표 수치 1개 필수 기재',
+      'BM(과금 단위/가격)과 첫 6개월 진입채널을 명확히 제시',
+    ],
+    evidence: ['요약 KPI 2개', '초기 고객 반응 지표', '수익모델 표'],
+    devilCheck: '“시장 크다, AI 한다” 같은 일반론 금지. 수치 없는 요약은 경쟁력이 약함',
+  },
+  {
+    title: '1-1. 문제인식(Problem) - 배경 및 필요성',
+    what: ['외부적 배경(시장/사회/기술), 내부적 배경(대표 경험), 추진 이력을 제시'],
+    how: [
+      '외부 배경은 규제/비용상승/인력부족 등 3요인으로 정리',
+      '고객 pain을 시간·비용·리스크 축 중 2개 이상 정량화',
+      '기존 대안(수작업/외주/엑셀)의 실패 포인트 3개 명시',
+    ],
+    evidence: ['고객 인터뷰 5~10건', '시장통계 2~3개 출처', '현장 업무흐름 캡처'],
+    devilCheck: '“고객이 불편하다”는 문장만으로는 부족. 불편의 규모와 현재 비용을 숫자로 못 박아야 함',
+  },
+  {
+    title: '1-2. 문제인식(Problem) - 목표시장 현황 분석',
+    what: ['시장 규모/특성/경쟁강도/전망/고객 요구사항을 정량 중심으로 기술'],
+    how: [
+      'TAM/SAM/SOM을 수치와 계산식으로 제시',
+      '초기 1순위 고객군을 구매속도 기준으로 좁혀 선정',
+      '경쟁지도(직접/간접/대체)를 3x3 매트릭스로 작성',
+    ],
+    evidence: ['시장 규모 산정 근거표', '경쟁 서비스 비교표', 'Must-have/Nice-to-have 목록'],
+    devilCheck: '처음 어디서 이길지(초기 3개월 고객군)가 없으면 실행전략 신뢰도가 급락',
+  },
+  {
+    title: '2-1. 실현가능성(Solution) - 개발/개선 준비현황',
+    what: ['신청 전 추진경과와 현재 성과(정량/정성)를 제시'],
+    how: [
+      '현재 단계(아이디어/목업/프로토/베타/유료고객)를 솔직히 표기',
+      '이미 확보한 자산(데이터/알고리즘/파트너)을 표로 정리',
+      '성과지표 3개 이상(테스트 사용자, 전환율, LOI 등) 명시',
+    ],
+    evidence: ['데모 화면', '사용 로그', 'LOI/MOU', '반복 사용률 데이터'],
+    devilCheck: '“준비 중” 단독 문구는 0점에 가까움. 최소한의 검증 흔적을 제시해야 함',
+  },
+  {
+    title: '2-2. 실현가능성(Solution) - 실현 및 고도화 방안',
+    what: ['협약기간 내 개발방안, 사업화 대응, 기술보호 계획을 기술'],
+    how: [
+      '핵심기능 3~5개를 입력-처리-출력 흐름으로 작성',
+      '자체개발/외주 범위를 분리하고 외주 산출물 정의서 작성',
+      '기술·일정·규제·데이터·영업 리스크별 Plan B 명시',
+      '특허/상표/영업비밀 중 최소 1개 실행계획 포함',
+    ],
+    evidence: ['기능 명세서', '개발 일정표', '외주 산출물 기준', '기술보호 실행계획'],
+    devilCheck: '최종 산출물은 변경이 어려우므로 “완료기준(Definition of Done)”까지 반드시 명시',
+  },
+  {
+    title: '3-1. 성장전략(Scale-up) - 비즈니스 모델',
+    what: ['수익모델과 진입 성과/전략을 구조적으로 설명'],
+    how: [
+      '과금단위(월구독/건당/프로젝트/수수료) 중 주모델 1개 확정',
+      '대체재 대비 절감/증대 효과로 가격 정당화',
+      'LTV, CAC, 마진, 회수기간 중 2개 이상 수치화(가정 명시)',
+    ],
+    evidence: ['가격 정책표', '유닛이코노믹스 시트', '초기 고객 지불의사 근거'],
+    devilCheck: '세일즈 사이클(주/월)을 쓰지 않으면 수익 실현 가능성 설득이 어려움',
+  },
+  {
+    title: '3-2. 성장전략(Scale-up) - 시장 진입 및 사업화 전략',
+    what: ['초기 채널, KPI, 확장조건을 협약기간 성과 중심으로 제시'],
+    how: [
+      '초기 채널은 1~2개만 선택하고 선택 이유(비용/속도/통제)를 설명',
+      'B2B 기준 KPI를 리드-미팅-파일럿-유료전환-재계약으로 설계',
+      '확장 조건(예: 파일럿 2건 + NPS 30 이상)을 명시',
+    ],
+    evidence: ['채널 실행 계획표', '월별 KPI 목표치', '파일럿 확장 조건 정의'],
+    devilCheck: '채널을 많이 나열하면 실행력이 낮아 보임. 적은 채널을 깊게 설계해야 함',
+  },
+  {
+    title: '3-3. 성장전략(Scale-up) - 추진 일정 및 자금 운용 계획',
+    what: ['전체 로드맵, 협약기간 목표, 자금 필요성/조달/집행을 정리'],
+    how: [
+      '전체 단계는 18~24개월 로드맵으로 게이트 조건과 함께 제시',
+      '협약기간(2026.5~12)은 월별 1~2개 마일스톤만 설정',
+      '개발 마일스톤과 검증 마일스톤을 항상 짝으로 배치',
+      '정부지원/자기부담(현금/현물) 비율을 수치로 명시',
+    ],
+    evidence: ['월별 마일스톤 표', '총사업비 구성표', '집행항목-KPI 연결표', '조달 계획'],
+    devilCheck: '예산이 산출물/KPI와 연결되지 않으면 “근거 없는 비용”으로 판단될 가능성이 큼',
+  },
+  {
+    title: '4-1. 조직구성(Team) - 조직 역량',
+    what: ['대표/팀 역량, 보유자원, 협약기간 내 인력 활용계획을 제시'],
+    how: [
+      '대표 역량은 도메인/기술/사업화 3축으로 압축',
+      '팀원은 직무-성과-기간-담당업무 포맷으로 통일',
+      '채용은 1~2명 범위로 현실적으로 설정하고 투입 시점 명시',
+    ],
+    evidence: ['핵심 인력 이력', '보유 장비/공간/데이터 표', '채용 및 투입 일정표'],
+    devilCheck: '화려한 이력보다 “협약기간 내 실제 수행 가능성”이 높은 역할 배치가 중요',
+  },
+  {
+    title: '4-2. 조직구성(Team) - 외부 네트워크 활용 계획',
+    what: ['개발/실증/유통/지역 연계를 위한 외부 네트워크 활용 방안을 제시'],
+    how: [
+      '파트너별 필요 이유를 개발·실증·판로 기준으로 명확화',
+      '협업 결과를 산출물 중심(테스트베드, 공동 PoC, 데이터 제공)으로 작성',
+      '협력 일정과 기대성과를 마일스톤과 연결',
+    ],
+    evidence: ['LOI/MOU', '파트너 미팅노트', '공동 실증 일정안'],
+    devilCheck: '네트워크는 “관계”보다 “성과 산출”이 핵심. 증빙 없는 협업 문구는 설득력이 낮음',
+  },
 ]
 
 const bxEvaluationRadar = [
-  { axis: '문제인식', score: 94 },
-  { axis: '실현가능성', score: 93 },
-  { axis: '성장전략', score: 91 },
-  { axis: '팀 구성', score: 92 },
+  { axis: 'Problem', score: 96 },
+  { axis: 'Solution', score: 94 },
+  { axis: 'Scale-up', score: 92 },
+  { axis: 'Team', score: 93 },
 ]
 
-const bxPipelineKpi = [
-  { stage: '실증(PoC)', value: 3 },
-  { stage: '시스템통합(SI) 수주', value: 3 },
-  { stage: '레퍼런스 확보', value: 2 },
-  { stage: '서비스형SW(SaaS) 베타 전환', value: 1 },
+const bxMilestonePlan = [
+  { month: '5월', 개발: 2, 검증: 1, 누적완료율: 12 },
+  { month: '6월', 개발: 3, 검증: 1, 누적완료율: 24 },
+  { month: '7월', 개발: 3, 검증: 2, 누적완료율: 39 },
+  { month: '8월', 개발: 2, 검증: 2, 누적완료율: 53 },
+  { month: '9월', 개발: 2, 검증: 3, 누적완료율: 67 },
+  { month: '10월', 개발: 2, 검증: 3, 누적완료율: 81 },
+  { month: '11월', 개발: 1, 검증: 3, 누적완료율: 91 },
+  { month: '12월', 개발: 1, 검증: 2, 누적완료율: 100 },
 ]
 
-const bxRequirementChecklist = [
-  {
-    title: '지원대상 적합성',
-    detail: '예비창업자 또는 업력 7년 이내 요건 충족 여부 확인, 사업자등록/법인등기/대표자 이력 증빙 준비',
-  },
-  {
-    title: '사업화 자금 사용계획',
-    detail: '시제품 고도화, 지식재산권, 실증비용, 마케팅 비용을 항목별로 구분해 집행 가능성 제시',
-  },
-  {
-    title: '문제인식의 명확성',
-    detail: 'B2B 제안 프로세스의 고비용·고편차·저재현성 문제를 정량 지표로 제시',
-  },
-  {
-    title: '실현가능성 증빙',
-    detail: 'MVP, 내부 테스트 로그, 실사용 시나리오(제안서 작성 시간 단축) 근거를 단계별로 제시',
-  },
-  {
-    title: '성장전략 설계',
-    detail: '엔터프라이즈 SI 수익 확보 → 표준화 → SaaS 전환의 수익모델 전개 구조를 명문화',
-  },
-  {
-    title: '팀 경쟁력',
-    detail: '도메인 컨설팅 역량 + AI 개발역량 + 사업개발 역량의 역할 분담과 의사결정 체계 제시',
-  },
-  {
-    title: '리스크 대응',
-    detail: 'AI 정확도, 데이터 보안, 납기 지연, 고객 전환율 저하 리스크의 완화 시나리오 포함',
-  },
+const bxFundingFrame = [
+  { item: '정부지원금(총사업비 대비)', value: 70 },
+  { item: '자기부담금(총사업비 대비)', value: 30 },
+  { item: '자기부담 현금(총사업비 대비)', value: 10 },
+  { item: '자기부담 현물(총사업비 대비)', value: 20 },
 ]
 
-const bxExecutionSteps = [
-  {
-    phase: '1단계(주간 1~2)',
-    detail: '공고문 요구사항 매핑: 제출서류, 분량, 정량평가 항목을 체크리스트화하고 누락 리스크 제거',
-  },
-  {
-    phase: '2단계(주간 3~4)',
-    detail: '문제-해결 구조 작성: 문제-해결 적합성(Problem-Solution-Fit)을 고객 사례와 함께 1차 서술',
-  },
-  {
-    phase: '3단계(주간 5~6)',
-    detail:
-      '기술 설명 고도화: 검색증강생성(RAG), 멀티 에이전트(Multi-Agent), 자기비평 루프(Self-Critique Loop)의 차별점을 경쟁대안 대비로 제시',
-  },
-  {
-    phase: '4단계(주간 7~8)',
-    detail: '재무 계획 세분화: 자금집행 월별 계획, 비용 항목별 KPI, 집행 책임자 지정',
-  },
-  {
-    phase: '5단계(주간 9~10)',
-    detail: '시장 검증 섹션 작성: 초기 타깃 고객군(금융/교육 컨설팅) 인터뷰·PoC 계획 연계',
-  },
-  {
-    phase: '6단계(주간 11~12)',
-    detail: '계획안 A/B 분기 전략 확정: 딥테크형과 지역기반형의 평가 포인트 차등 반영',
-  },
-  {
-    phase: '7단계(주간 13~14)',
-    detail: '발표평가 대비: 예상 질문 50개 세트, 데모 시연 흐름, 재무질의 대응자료 사전 준비',
-  },
-  {
-    phase: '8단계(주간 15~16)',
-    detail: '제출 전 품질점검: 분량/형식/증빙/수치 일관성 검토 및 최종 교차 검증',
-  },
-]
-
-const bxRiskControls = [
-  'AI 생성 정확도 리스크: 전문가 검토 연계(Human-in-the-Loop) 승인게이트와 품질평가 에이전트 병행',
-  '데이터 보안 리스크: 고객사 전용 저장소 분리, 최소권한 접근 정책, 민감정보 마스킹',
-  '수주 지연 리스크: 시스템통합(SI)/실증(PoC) 동시 파이프라인 확보로 월별 현금흐름 평탄화',
-  '전환율 리스크: 업종별 템플릿(금융/제조/공공) 사전 구축으로 도입장벽 완화',
-  '원가 초과 리스크: 토큰 사용량/인프라 비용 상한관리 및 예산 경보 체계 운영',
+const bxFinalChecklist: BxChecklistItem[] = [
+  { item: '양식 변경/삭제 없이 작성', criterion: '양식 표/순서/항목 그대로 유지' },
+  { item: '목차 페이지 삭제', criterion: '제출본에서 목차 페이지 삭제 확인' },
+  { item: '파란 안내문구 삭제', criterion: '안내문구 제거 후 검정 텍스트로 정리' },
+  { item: '개인정보 마스킹 준수', criterion: '이름/생년/학교/직장 유추정보 비식별 처리' },
+  { item: '협약기간 산출물 완료기준 명시', criterion: '산출물별 Definition of Done 작성' },
+  { item: '예산-KPI 1:1 연결', criterion: '집행항목마다 대응 KPI/성과지표 부착' },
+  { item: 'Problem-Solution-Scale-up-Team 논리 일관성', criterion: '서로 모순되는 수치/문구 없음' },
 ]
 
 const bxSources: SourceDoc[] = [
   {
-    title: 'BX컨설팅 초기창업패키지 지원사업 어플라이 프로젝트',
-    org: 'NotebookLM',
+    title: '2026 창업중심대학 지역기반 (예비)창업기업 사업계획서 양식(별첨1)',
+    org: '창업중심대학 운영기관',
     year: '2026',
     url: bxNotebookUrl,
-    usedFor: '사업개념, 팀/실행전략, 매출목표 및 단계별 로드맵',
+    usedFor: '양식 구조, 작성 제한사항(목차 삭제/분량/안내문구 삭제/마스킹) 반영',
+  },
+  {
+    title: '2026 창업중심대학 지역기반 모집공고',
+    org: '중소벤처기업부/창업진흥원',
+    year: '2026',
+    url: bxNotebookUrl,
+    usedFor: '협약기간(2026.5~12), 평가구조, 신청 및 운영 요건 반영',
+  },
+  {
+    title: '2026 창업중심대학 대학발 모집공고(비교 참고)',
+    org: '중소벤처기업부/창업진흥원',
+    year: '2026',
+    url: bxNotebookUrl,
+    usedFor: '지원유형별 숫자/일정 차이 검토 및 비교 참고',
   },
   {
     title: 'K-Startup 공식 포털',
     org: '중소벤처기업부 / 창업진흥원',
     year: '2026',
     url: 'https://www.k-startup.go.kr/',
-    usedFor: '지원사업 신청 채널, 공고문/서식 접근 경로',
-  },
-  {
-    title: '2026 창업중심대학 지역기반 모집공고 PDF',
-    org: '모집기관 공고문',
-    year: '2026',
-    url: 'https://dreamstartup.co.kr/media/bizSupport/file/49e6cf35/%EA%B3%B5%EA%B3%A0%EB%AC%B8_2026%EB%85%84%EB%8F%84_%EC%B0%BD%EC%97%85%EC%A4%91%EC%8B%AC%EB%8C%80%ED%95%99_%EC%A7%80%EC%97%AD%EA%B8%B0%EB%B0%98_%EC%98%88%EB%B9%84%EC%B0%BD%EC%97%85%EA%B8%B0%EC%97%85_%EB%AA%A8%EC%A7%91%EA%B3%B5%EA%B3%A0.pdf',
-    usedFor: '지원요건·사업화 자금·평가항목·제출 구조',
+    usedFor: '최종 공고 확인 및 제출 채널 검증',
   },
 ]
 
@@ -865,148 +999,137 @@ function BxView({ onBack }: { onBack: () => void }) {
       </section>
 
       <section className="hero compact bx-hero">
-        <span className="hero-kicker">BX컨설팅 사업계획서</span>
-        <h1>초기창업패키지/창업중심대학 대응 어플라이 프로젝트 페이지</h1>
+        <span className="hero-kicker">BX컨설팅 | 창업중심대학(지역기반)</span>
+        <h1>2026 창업중심대학(지역기반) 사업계획서 작성 가이드 및 실행전략</h1>
         <p>
-          본 페이지는 BX컨설팅 노트북 자료를 기반으로 공고 적합성, 재무 계획, 실행 단계, 리스크 통제를 통합한 실전형
-          제안서 구조입니다. 핵심 목적은 평가위원이 요구하는 문제정의-실행가능성-성장전략-팀역량을 한 흐름으로 확인할 수
-          있도록 구성하는 것입니다.
+          본 페이지는 사업계획서 양식 목차를 그대로 반영한 미러형 구조입니다. “무엇을/어떻게/근거”를 각 섹션별로
+          지시형으로 배치해, 작성 과정에서 누락 없이 바로 실행할 수 있도록 구성했습니다.
         </p>
+        <div className="notice-box">
+          고정 수치(협약기간/비율 등)는 본문에 명시했으며, 제출 직전 최종 지원유형 공고와 일치 여부를 반드시 재확인해야
+          합니다.
+        </div>
       </section>
 
       <section className="summary-grid">
         <article className="summary-card">
           <div className="summary-head">
-            <Rocket size={16} /> 대상 트랙
+            <Rocket size={16} /> 채점 프레임
           </div>
-          <strong>2026 창업지원 2트랙</strong>
-          <p>창업중심대학(지역기반) + 딥테크형 초기창업패키지 병행</p>
+          <strong>Problem → Solution → Scale-up → Team</strong>
+          <p>문제의 크기, 해결의 실현성, 수익화 경로, 팀 수행력을 일관되게 증명</p>
         </article>
         <article className="summary-card">
           <div className="summary-head">
-            <HandCoins size={16} /> 자금 프레임
+            <HandCoins size={16} /> 협약기간
           </div>
-          <strong>최대 1억원(공고기준)</strong>
-          <p>자기부담(현금/현물) 조합으로 집행 리스크 관리</p>
+          <strong>2026년 5월 ~ 12월 (8개월)</strong>
+          <p>월별 1~2개 마일스톤 중심으로 개발+검증 병행 배치</p>
         </article>
         <article className="summary-card">
           <div className="summary-head">
-            <TrendingUp size={16} /> 매출 목표
+            <TrendingUp size={16} /> 총사업비 구조(창업기업)
           </div>
-          <strong>11 → 30 → 58억원</strong>
-          <p>2026~2028 보수적 시나리오 기준</p>
+          <strong>정부지원 70% 이하 / 자기부담 30% 이상</strong>
+          <p>자기부담 내 현금 10% 이상, 현물 20% 이하 기준으로 집행 설계</p>
         </article>
         <article className="summary-card">
           <div className="summary-head">
-            <Landmark size={16} /> 사업 모델
+            <Landmark size={16} /> 작성 제한사항
           </div>
-          <strong>시스템통합(SI) → 서비스형 소프트웨어(SaaS)</strong>
-          <p>레퍼런스 확보 후 구독형 전환으로 반복매출 구조화</p>
+          <strong>양식 변경 불가 / 본문 10페이지 이내</strong>
+          <p>목차 페이지 삭제, 파란 안내문구 삭제, 개인정보 마스킹 준수</p>
         </article>
       </section>
 
-      <section className="panel two-col">
-        <div>
-          <div className="panel-header">
-            <h2>공고 요건 적합성 체크리스트</h2>
-          </div>
-          <ul className="fit-list long">
-            {bxRequirementChecklist.map((item) => (
-              <li key={item.title}>
-                <strong>{item.title}</strong>
-                <span>{item.detail}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="decision-box">
-            <p>
-              <strong>계획안 A(딥테크형):</strong> 기술 검증과 확장성(멀티에이전트/RAG 차별성) 가점 극대화
-            </p>
-            <p>
-              <strong>계획안 B(지역기반형):</strong> 지역 파트너 연계와 실증 중심 운영계획으로 선정확률 제고
-            </p>
-          </div>
+      <section className="panel">
+        <div className="panel-header">
+          <h2>작성 전제(심사위원 채점 프레임)</h2>
         </div>
-
-        <div>
-          <div className="panel-header">
-            <h2>재원 구성(억원)</h2>
-          </div>
-          <div className="chart-wrap">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={bxFundingMix} layout="vertical" margin={{ left: 12, right: 18 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#2a3c4f" />
-                <XAxis type="number" stroke="#a9bed1" />
-                <YAxis dataKey="item" type="category" stroke="#a9bed1" width={100} />
-                <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}억원`} />
-                <Bar dataKey="value" fill="#65d5ce" radius={[0, 8, 8, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="panel-header mt12">
-            <h2>단계별 KPI(건수)</h2>
-          </div>
-          <div className="chart-wrap short">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={bxPipelineKpi}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#2a3c4f" />
-                <XAxis dataKey="stage" stroke="#a9bed1" />
-                <YAxis stroke="#a9bed1" />
-                <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}건`} />
-                <Bar dataKey="value" fill="#f4b64b" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </section>
-
-      <section className="panel two-col">
-        <div>
-          <div className="panel-header">
-            <h2>매출 전망(억원)</h2>
-          </div>
-          <div className="chart-wrap">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={bxRevenueProjection}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#2a3c4f" />
-                <XAxis dataKey="year" stroke="#a9bed1" />
-                <YAxis stroke="#a9bed1" />
-                <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}억원`} />
-                <Legend />
-                <Line type="monotone" dataKey="보수적" stroke="#65d5ce" strokeWidth={2.5} name="보수적" />
-                <Line type="monotone" dataKey="공격적" stroke="#f4b64b" strokeWidth={2.5} name="공격적" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        <div>
-          <div className="panel-header">
-            <h2>평가항목 대응 점수</h2>
-          </div>
-          <div className="chart-wrap">
-            <ResponsiveContainer width="100%" height="100%">
-              <RadarChart data={bxEvaluationRadar}>
-                <PolarGrid stroke="#385068" />
-                <PolarAngleAxis dataKey="axis" stroke="#a9bed1" fontSize={11} />
-                <PolarRadiusAxis domain={[0, 100]} stroke="#6e879c" />
-                <Radar name="대응도" dataKey="score" stroke="#65d5ce" fill="#65d5ce" fillOpacity={0.35} />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
+        <div className="premise-grid">
+          {bxWritingPremise.map((item) => (
+            <article key={item} className="premise-card">
+              <CheckCircle2 size={15} />
+              <p>{item}</p>
+            </article>
+          ))}
         </div>
       </section>
 
       <section className="panel">
         <div className="panel-header">
-          <h2>실행 단계(주차 단위 상세)</h2>
+          <h2>실행 계획(작성 프로세스 | Step A~D)</h2>
         </div>
-        <div className="roadmap long">
-          {bxExecutionSteps.map((step) => (
-            <article key={step.phase} className="roadmap-step">
-              <span>{step.phase}</span>
-              <h3>{step.detail}</h3>
+        <div className="exec-grid">
+          {bxExecutionPlanSteps.map((step) => (
+            <article key={step.step} className="exec-card">
+              <header>
+                <span>{step.step}</span>
+                <h3>{step.goal}</h3>
+              </header>
+              <div className="exec-columns">
+                <div>
+                  <h4>입력물</h4>
+                  <ul>
+                    {step.inputs.map((input) => (
+                      <li key={input}>{input}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4>산출물</h4>
+                  <ul>
+                    {step.outputs.map((output) => (
+                      <li key={output}>{output}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="devil-box">
+                <strong>검증 포인트</strong>
+                <p>{step.check}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="panel">
+        <div className="panel-header">
+          <h2>양식 목차 미러 섹션(무엇을/어떻게/근거/악마의 대변인 체크)</h2>
+        </div>
+        <div className="mirror-grid">
+          {bxFormMirrorSections.map((section) => (
+            <article key={section.title} className="mirror-card">
+              <h3>{section.title}</h3>
+              <div className="mirror-group">
+                <h4>무엇을</h4>
+                <ul>
+                  {section.what.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mirror-group">
+                <h4>어떻게</h4>
+                <ul>
+                  {section.how.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mirror-group">
+                <h4>근거</h4>
+                <ul>
+                  {section.evidence.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="devil-box">
+                <strong>악마의 대변인 체크</strong>
+                <p>{section.devilCheck}</p>
+              </div>
             </article>
           ))}
         </div>
@@ -1015,13 +1138,88 @@ function BxView({ onBack }: { onBack: () => void }) {
       <section className="panel two-col">
         <div>
           <div className="panel-header">
-            <h2>리스크 통제 전략</h2>
+            <h2>총사업비 집행 프레임(비율, %)</h2>
+          </div>
+          <div className="chart-wrap">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={bxFundingFrame} layout="vertical" margin={{ left: 8, right: 18 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#2a3c4f" />
+                <XAxis type="number" stroke="#a9bed1" unit="%" />
+                <YAxis dataKey="item" type="category" stroke="#a9bed1" width={170} />
+                <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}%`} />
+                <Bar dataKey="value" fill="#65d5ce" radius={[0, 8, 8, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div>
+          <div className="panel-header">
+            <h2>평가항목 대응도(Radar)</h2>
+          </div>
+          <div className="chart-wrap">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart data={bxEvaluationRadar}>
+                <PolarGrid stroke="#385068" />
+                <PolarAngleAxis dataKey="axis" stroke="#a9bed1" fontSize={11} />
+                <PolarRadiusAxis domain={[0, 100]} stroke="#6e879c" />
+                <Radar name="대응도 점수" dataKey="score" stroke="#65d5ce" fill="#65d5ce" fillOpacity={0.35} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </section>
+
+      <section className="panel two-col">
+        <div>
+          <div className="panel-header">
+            <h2>협약기간 월별 마일스톤(Bar)</h2>
+          </div>
+          <div className="chart-wrap">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={bxMilestonePlan}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#2a3c4f" />
+                <XAxis dataKey="month" stroke="#a9bed1" />
+                <YAxis stroke="#a9bed1" />
+                <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}개`} />
+                <Legend />
+                <Bar dataKey="개발" fill="#65d5ce" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="검증" fill="#f4b64b" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div>
+          <div className="panel-header">
+            <h2>협약기간 누적 완료율(Line)</h2>
+          </div>
+          <div className="chart-wrap">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={bxMilestonePlan}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#2a3c4f" />
+                <XAxis dataKey="month" stroke="#a9bed1" />
+                <YAxis stroke="#a9bed1" unit="%" />
+                <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}%`} />
+                <Line type="monotone" dataKey="누적완료율" stroke="#9bc1ff" strokeWidth={2.6} name="누적완료율" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </section>
+
+      <section className="panel two-col">
+        <div>
+          <div className="panel-header">
+            <h2>최종 점검 체크리스트(탈락 방지용)</h2>
           </div>
           <ul className="fit-list">
-            {bxRiskControls.map((item) => (
-              <li key={item}>
-                <CheckCircle2 size={14} />
-                <span>{item}</span>
+            {bxFinalChecklist.map((item) => (
+              <li key={item.item}>
+                <div>
+                  <strong>{item.item}</strong>
+                  <span>{item.criterion}</span>
+                </div>
               </li>
             ))}
           </ul>
@@ -1033,16 +1231,16 @@ function BxView({ onBack }: { onBack: () => void }) {
           </div>
           <div className="decision-box expanded">
             <p>
-              1. <strong>선정확률 관점:</strong> 단순 아이디어가 아닌 실증가능한 기술-사업 연계 구조를 전면 배치
+              1. <strong>양식 적합성:</strong> 양식 구조를 바꾸지 않고 목차별 요구 항목을 정확히 채우는 것이 1순위입니다.
             </p>
             <p>
-              2. <strong>수익모델 관점:</strong> SI 초기매출로 현금흐름을 확보하고 SaaS 전환으로 반복매출 체계 구축
+              2. <strong>수치 중심 작성:</strong> 설명보다 표·숫자·완료기준 중심으로 10페이지 내 압축해야 합니다.
             </p>
             <p>
-              3. <strong>실행관점:</strong> 주차 단위 산출물(요건매핑, 기술명세, 재무집행, 발표대응) 기반 운영
+              3. <strong>협약기간 실행력:</strong> 2026.5~12 내 개발+검증 마일스톤을 월별로 제시해야 신뢰도가 올라갑니다.
             </p>
             <p>
-              4. <strong>리스크관점:</strong> 품질·보안·원가·수주 변수를 사전 통제 항목으로 문서화
+              4. <strong>증빙 기반 주장:</strong> 모든 핵심 문장에 인터뷰/로그/LOI/근거자료를 연결해야 심사 질의에 버틸 수 있습니다.
             </p>
           </div>
         </div>

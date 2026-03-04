@@ -1,16 +1,16 @@
-﻿# 0chul's lair
+# 0chul's lair
 
-Report hub project for strategy/proposal pages powered by NotebookLM research assets.
+NotebookLM 리서치 자산을 기반으로 전략 보고서/제안서 페이지를 제공하는 웹 허브 프로젝트입니다.
 
 ## Pages
 
-- Samhwa Paint HQ Asset Strategy (Scenario A-E)
-- BX Consulting APPLY PROJECT Business Plan (2026 startup tracks)
+- 삼화페인트 사옥 자산가치 전략 보고서 (시나리오 A~E)
+- BX컨설팅 2026 창업중심대학(지역기반) 사업계획서 작성 가이드 및 실행전략 (양식 미러형)
 
 ## Data Sources
 
 - NotebookLM: Seoul Headquarters Annex 1 Expansion and Relocation Strategy
-- NotebookLM: BX컨설팅 초기창업패키지 지원사업 APPLY PROJECT
+- NotebookLM: 2026 창업중심대학 사업계획서 작성 가이드 및 실행 전략
 - Extract files:
   - `notebook-extract.json`
   - `source-links-raw.json`
