@@ -81,7 +81,7 @@ const reportCards: ReportCard[] = [
     subtitle: '2026-2035 시나리오 A~E 재무/리스크/실행 전략',
     icon: Building2,
     bullets: [
-      '10개년 FCF·IRR·회수기간 3개 케이스(Down/Base/Up) 비교',
+      '10개년 FCF·IRR·회수기간 3개 케이스(하향/기준/상향) 비교',
       '규제·인허가·PF 금리·공사비 리스크 레이더 시각화',
       '단기(D) + 중장기(E) 하이브리드 실행 로드맵 제시',
     ],
@@ -89,13 +89,13 @@ const reportCards: ReportCard[] = [
   },
   {
     id: 'bx',
-    title: 'BX컨설팅 APPLY PROJECT 사업계획서',
+    title: 'BX컨설팅 어플라이 프로젝트 사업계획서',
     subtitle: '창업지원사업 대응형 제안서(요건-재무-실행-리스크)',
     icon: Rocket,
     bullets: [
       '공고 요건 적합성 체크리스트와 평가항목 대응 구조',
-      '재원 구성·매출 목표·단계별 KPI 차트',
-      'Plan A/B 트랙 운영전략과 실무 실행 단계 상세화',
+      '재원 구성·매출 목표·단계별 핵심성과지표(KPI) 차트',
+      '계획안 A/B 트랙 운영전략과 실무 실행 단계 상세화',
     ],
     sourceUrl: bxNotebookUrl,
   },
@@ -105,7 +105,7 @@ const samhwaScenarios: SamhwaScenario[] = [
   {
     code: 'A',
     name: '매각 후 리스백',
-    strategy: 'Sale & Leaseback',
+    strategy: '매각 후 재임차(리스백)',
     capex: 0,
     fcfBase: 1600,
     fcfUp: 1800,
@@ -119,15 +119,15 @@ const samhwaScenarios: SamhwaScenario[] = [
       '자산 매각 대금으로 전략적 투자 재원 확보 가능',
     ],
     cons: [
-      '장기 임차료(NOC) 부담과 임대료 상승 리스크 노출',
+      '장기 순점유비용(NOC) 부담과 임대료 상승 리스크 노출',
       'IFRS16 리스부채 계상으로 재무비율 개선 효과 일부 상쇄 가능',
       '향후 지가 상승에 따른 보유자산 자본이득 기회 상실',
     ],
     steps: [
       '1단계(2026): 매각 구조 및 리스 조건 확정(임차기간·갱신옵션·관리비 구조 포함)',
       '2단계(2026~2027): 리스 조건 재협상 가능한 트리거(금리/공실률 연동) 계약 반영',
-      '3단계(2028~2030): 절감된 재무여력을 본업 CAPEX·디지털 전환 투자로 전환',
-      '4단계(2031~2035): 리스 연장/이전/재매입 옵션을 비교해 Exit 의사결정',
+      '3단계(2028~2030): 절감된 재무여력을 본업 설비투자(CAPEX)·디지털 전환 투자로 전환',
+      '4단계(2031~2035): 리스 연장/이전/재매입 옵션을 비교해 엑시트(Exit) 의사결정',
     ],
     go: '재무 건전성 개선과 현금 확보가 최우선 과제일 때',
     noGo: '장기 자산 보유 이득(지가 상승/임대 수익)을 핵심 전략으로 볼 때',
@@ -135,7 +135,7 @@ const samhwaScenarios: SamhwaScenario[] = [
   {
     code: 'B',
     name: '매각 후 신규 사옥 매입',
-    strategy: 'Sell & Acquire',
+    strategy: '매각 후 신규 매입',
     capex: 170.5,
     fcfBase: 400,
     fcfUp: 750,
@@ -145,7 +145,7 @@ const samhwaScenarios: SamhwaScenario[] = [
     summary: '입지 업그레이드와 브랜드 리포지셔닝을 노리는 전략적 이전 시나리오',
     pros: [
       '도심 핵심권역 입지 확보 시 인재 채용·브랜드 이미지 개선 효과',
-      '장기 보유 시 자본이득(Capital Gain) 수혜 가능',
+      '장기 보유 시 자본이득(Capital Gain) 수혜 가능성 확대',
       '업무공간 구조를 처음부터 최신 업무 방식에 맞춰 설계 가능',
     ],
     cons: [
@@ -155,8 +155,8 @@ const samhwaScenarios: SamhwaScenario[] = [
     ],
     steps: [
       '1단계(2026): 권역별 후보지 롱리스트 작성(GBD·마곡·성수 등)',
-      '2단계(2026~2027): PF 구조(LTV 60~70%)와 세무 시뮬레이션 동시 검증',
-      '3단계(2027~2029): 우선협상 매물 2~3개를 동일 조건으로 IC 심의',
+      '2단계(2026~2027): PF 구조(담보인정비율 LTV 60~70%)와 세무 시뮬레이션 동시 검증',
+      '3단계(2027~2029): 우선협상 매물 2~3개를 동일 조건으로 투자심의위원회(IC) 심의',
       '4단계(2030~2035): 매입 자산의 임대/자가 사용 비율 최적화',
     ],
     go: '입지 전략과 조직문화 전환을 동시에 달성해야 할 때',
@@ -165,7 +165,7 @@ const samhwaScenarios: SamhwaScenario[] = [
   {
     code: 'C',
     name: '단독 신축',
-    strategy: 'Standalone Reconstruction',
+    strategy: '단독 신축 개발',
     capex: 53,
     fcfBase: -80,
     fcfUp: -30,
@@ -195,7 +195,7 @@ const samhwaScenarios: SamhwaScenario[] = [
   {
     code: 'D',
     name: '대수선(리모델링)',
-    strategy: 'Major Remodeling',
+    strategy: '대수선 리모델링',
     capex: 26.75,
     fcfBase: -15,
     fcfUp: 10,
@@ -204,7 +204,7 @@ const samhwaScenarios: SamhwaScenario[] = [
     payback: 4.5,
     summary: '투자대비 속도와 효율을 중시하는 단기 성과형 시나리오',
     pros: [
-      '신축 대비 CAPEX를 크게 절감하면서 실행 속도 확보',
+      '신축 대비 총투자비(CAPEX)를 크게 절감하면서 실행 속도 확보',
       '회수기간이 가장 짧아 재무 부담 관리에 유리',
       '스마트빌딩/설비 개선을 통해 운영비 절감 효과 확보',
     ],
@@ -225,7 +225,7 @@ const samhwaScenarios: SamhwaScenario[] = [
   {
     code: 'E',
     name: '필지 통합 후 신축',
-    strategy: 'Parcel Integration Development',
+    strategy: '필지 통합 개발',
     capex: 95,
     fcfBase: 120,
     fcfUp: 350,
@@ -287,17 +287,17 @@ const samhwaExecutionStages = [
   {
     phase: '1단계: 2026 Q1-Q2',
     detail:
-      '시나리오 D(대수선) 상세 설계와 예산 락(lock), 병행으로 E(필지통합) 이해관계자 협상 프레임 구축. 법무/세무/건축/재무 합동 TF 운영.',
+      '시나리오 D(대수선) 상세 설계와 예산 고정(락인), 병행으로 E(필지통합) 이해관계자 협상 프레임 구축. 법무/세무/건축/재무 합동 전담조직(TF) 운영.',
   },
   {
     phase: '2단계: 2026 Q3-Q4',
     detail:
-      'D 시나리오 공사 착수(운영중 공사 분할 방식), KPI는 공기 준수·예산 준수·업무중단 시간 최소화. E는 도시계획 협의 사전 미팅 수행.',
+      'D 시나리오 공사 착수(운영중 공사 분할 방식), 핵심성과지표(KPI)는 공기 준수·예산 준수·업무중단 시간 최소화. E는 도시계획 협의 사전 미팅 수행.',
   },
   {
     phase: '3단계: 2027~2028',
     detail:
-      'D 준공 후 운영효율 검증(에너지, 유지관리, 공간활용). E는 인허가/사업성 재검증 및 PF 구조(고정금리/변동금리 믹스) 확정.',
+      'D 준공 후 운영효율 검증(에너지, 유지관리, 공간활용). E는 인허가/사업성 재검증 및 PF 구조(고정금리/변동금리 혼합) 확정.',
   },
   {
     phase: '4단계: 2029~2031',
@@ -317,14 +317,14 @@ const samhwaSources: SourceDoc[] = [
     org: 'BIGPLANNER PARTNERS',
     year: '2026',
     url: samhwaNotebookUrl,
-    usedFor: '시나리오 A~E 수치(FCF, IRR, payback) 및 가정치',
+    usedFor: '시나리오 A~E 수치(FCF, IRR, 회수기간) 및 가정치',
   },
   {
     title: '서울본사 1별관 신축 검토_최종v.3',
     org: '삼화페인트 인사총무팀',
     year: '2023',
     url: samhwaNotebookUrl,
-    usedFor: '단독 신축 CAPEX 범위 및 면적 확장 논리',
+    usedFor: '단독 신축 총투자비(CAPEX) 범위 및 면적 확장 논리',
   },
   {
     title: '묘동7번지 업무시설 대수선 검토안',
@@ -362,10 +362,10 @@ const bxEvaluationRadar = [
 ]
 
 const bxPipelineKpi = [
-  { stage: 'PoC', value: 3 },
-  { stage: 'SI 수주', value: 3 },
+  { stage: '실증(PoC)', value: 3 },
+  { stage: '시스템통합(SI) 수주', value: 3 },
   { stage: '레퍼런스 확보', value: 2 },
-  { stage: 'SaaS 베타 전환', value: 1 },
+  { stage: '서비스형SW(SaaS) 베타 전환', value: 1 },
 ]
 
 const bxRequirementChecklist = [
@@ -406,11 +406,12 @@ const bxExecutionSteps = [
   },
   {
     phase: '2단계(주간 3~4)',
-    detail: '문제-해결 구조 작성: Problem-Solution-Fit을 고객 사례와 함께 1차 서술',
+    detail: '문제-해결 구조 작성: 문제-해결 적합성(Problem-Solution-Fit)을 고객 사례와 함께 1차 서술',
   },
   {
     phase: '3단계(주간 5~6)',
-    detail: '기술 설명 고도화: RAG, Multi-Agent, Self-Critique Loop의 차별점을 경쟁대안 대비로 제시',
+    detail:
+      '기술 설명 고도화: 검색증강생성(RAG), 멀티 에이전트(Multi-Agent), 자기비평 루프(Self-Critique Loop)의 차별점을 경쟁대안 대비로 제시',
   },
   {
     phase: '4단계(주간 7~8)',
@@ -422,7 +423,7 @@ const bxExecutionSteps = [
   },
   {
     phase: '6단계(주간 11~12)',
-    detail: 'Plan A/B 분기 전략 확정: 딥테크형과 지역기반형의 평가 포인트 차등 반영',
+    detail: '계획안 A/B 분기 전략 확정: 딥테크형과 지역기반형의 평가 포인트 차등 반영',
   },
   {
     phase: '7단계(주간 13~14)',
@@ -435,16 +436,16 @@ const bxExecutionSteps = [
 ]
 
 const bxRiskControls = [
-  'AI 생성 정확도 리스크: Human-in-the-Loop 승인게이트와 품질평가 에이전트 병행',
+  'AI 생성 정확도 리스크: 전문가 검토 연계(Human-in-the-Loop) 승인게이트와 품질평가 에이전트 병행',
   '데이터 보안 리스크: 고객사 전용 저장소 분리, 최소권한 접근 정책, 민감정보 마스킹',
-  '수주 지연 리스크: SI/PoC 동시 파이프라인 확보로 월별 현금흐름 평탄화',
+  '수주 지연 리스크: 시스템통합(SI)/실증(PoC) 동시 파이프라인 확보로 월별 현금흐름 평탄화',
   '전환율 리스크: 업종별 템플릿(금융/제조/공공) 사전 구축으로 도입장벽 완화',
   '원가 초과 리스크: 토큰 사용량/인프라 비용 상한관리 및 예산 경보 체계 운영',
 ]
 
 const bxSources: SourceDoc[] = [
   {
-    title: 'BX컨설팅 초기창업패키지 지원사업 APPLY PROJECT',
+    title: 'BX컨설팅 초기창업패키지 지원사업 어플라이 프로젝트',
     org: 'NotebookLM',
     year: '2026',
     url: bxNotebookUrl,
@@ -509,7 +510,7 @@ function HubView({ onSelect }: { onSelect: (view: Exclude<ViewKey, 'hub'>) => vo
         <span className="hero-kicker">보고서 허브</span>
         <h1>0chul&apos;s lair</h1>
         <p>
-          NotebookLM 기반 리서치 산출물을 실행 가능한 보고서 UI로 구성한 상위 리스트뷰입니다. 문서별로 요약이 아니라
+          NotebookLM 기반 리서치 산출물을 실행 가능한 보고서 화면으로 구성한 상위 리스트뷰입니다. 문서별로 요약이 아니라
           의사결정에 필요한 수치, 단계, 리스크 대응, 출처 링크를 분리해 확인할 수 있습니다.
         </p>
       </motion.section>
@@ -566,15 +567,15 @@ function SamhwaScenarioCard({ scenario }: { scenario: SamhwaScenario }) {
 
       <div className="metric-inline">
         <div>
-          <small>CAPEX</small>
+          <small>총투자비(CAPEX)</small>
           <strong>{scenario.capex.toLocaleString('ko-KR')}억원</strong>
         </div>
         <div>
-          <small>Base FCF</small>
+          <small>기준 자유현금흐름(FCF)</small>
           <strong>{scenario.fcfBase.toLocaleString('ko-KR')}억원</strong>
         </div>
         <div>
-          <small>IRR</small>
+          <small>내부수익률(IRR)</small>
           <strong>{scenario.irr.toFixed(1)}%</strong>
         </div>
         <div>
@@ -612,13 +613,13 @@ function SamhwaScenarioCard({ scenario }: { scenario: SamhwaScenario }) {
           </ol>
         </div>
         <div>
-          <h4>Go / No-Go 기준</h4>
+          <h4>추진 / 중단 기준</h4>
           <div className="decision-box">
             <p>
-              <strong>Go:</strong> {scenario.go}
+              <strong>추진:</strong> {scenario.go}
             </p>
             <p>
-              <strong>No-Go:</strong> {scenario.noGo}
+              <strong>중단:</strong> {scenario.noGo}
             </p>
           </div>
         </div>
@@ -657,7 +658,7 @@ function SamhwaView({ onBack }: { onBack: () => void }) {
       <section className="summary-grid">
         <article className="summary-card">
           <div className="summary-head">
-            <HandCoins size={16} /> Base FCF 최고
+            <HandCoins size={16} /> 기준 FCF 최고
           </div>
           <strong>
             {bestScenario.code}안 ({bestScenario.name})
@@ -702,9 +703,9 @@ function SamhwaView({ onBack }: { onBack: () => void }) {
                 <YAxis stroke="#a9bed1" unit="억" />
                 <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}억원`} />
                 <Legend />
-                <Bar dataKey="fcfDown" fill="#f08a71" name="Down" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="fcfBase" fill="#1fb4a8" name="Base" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="fcfUp" fill="#65d5ce" name="Up" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="fcfDown" fill="#f08a71" name="하향" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="fcfBase" fill="#1fb4a8" name="기준" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="fcfUp" fill="#65d5ce" name="상향" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -784,7 +785,7 @@ function SamhwaView({ onBack }: { onBack: () => void }) {
 
       <section className="panel">
         <div className="panel-header">
-          <h2>시나리오 상세 분석(장점·한계·실행 단계·Go/No-Go)</h2>
+          <h2>시나리오 상세 분석(장점·한계·실행 단계·추진/중단)</h2>
         </div>
         <div className="detail-grid">
           {samhwaScenarios.map((scenario) => (
@@ -865,7 +866,7 @@ function BxView({ onBack }: { onBack: () => void }) {
 
       <section className="hero compact bx-hero">
         <span className="hero-kicker">BX컨설팅 사업계획서</span>
-        <h1>초기창업패키지/창업중심대학 대응 APPLY PROJECT 페이지</h1>
+        <h1>초기창업패키지/창업중심대학 대응 어플라이 프로젝트 페이지</h1>
         <p>
           본 페이지는 BX컨설팅 노트북 자료를 기반으로 공고 적합성, 재무 계획, 실행 단계, 리스크 통제를 통합한 실전형
           제안서 구조입니다. 핵심 목적은 평가위원이 요구하는 문제정의-실행가능성-성장전략-팀역량을 한 흐름으로 확인할 수
@@ -899,7 +900,7 @@ function BxView({ onBack }: { onBack: () => void }) {
           <div className="summary-head">
             <Landmark size={16} /> 사업 모델
           </div>
-          <strong>SI → SaaS</strong>
+          <strong>시스템통합(SI) → 서비스형 소프트웨어(SaaS)</strong>
           <p>레퍼런스 확보 후 구독형 전환으로 반복매출 구조화</p>
         </article>
       </section>
@@ -919,10 +920,10 @@ function BxView({ onBack }: { onBack: () => void }) {
           </ul>
           <div className="decision-box">
             <p>
-              <strong>Plan A(딥테크형):</strong> 기술 검증과 확장성(멀티에이전트/RAG 차별성) 가점 극대화
+              <strong>계획안 A(딥테크형):</strong> 기술 검증과 확장성(멀티에이전트/RAG 차별성) 가점 극대화
             </p>
             <p>
-              <strong>Plan B(지역기반형):</strong> 지역 파트너 연계와 실증 중심 운영계획으로 선정확률 제고
+              <strong>계획안 B(지역기반형):</strong> 지역 파트너 연계와 실증 중심 운영계획으로 선정확률 제고
             </p>
           </div>
         </div>
