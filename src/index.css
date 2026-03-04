@@ -297,9 +297,14 @@ a {
   height: 340px;
 }
 
+.chart-wrap.short {
+  height: 220px;
+}
+
 .fit-list {
   margin: 10px 0 0;
-  padding-left: 18px;
+  padding: 0;
+  list-style: none;
   color: var(--ink-200);
   display: grid;
   gap: 6px;
@@ -307,8 +312,32 @@ a {
   line-height: 1.48;
 }
 
-.decision {
-  margin: 12px 0 0;
+.fit-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(54, 87, 111, 0.6);
+  border-radius: 10px;
+  background: rgba(20, 34, 46, 0.72);
+}
+
+.fit-list li strong {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--ink-100);
+}
+
+.fit-list li span {
+  color: var(--ink-200);
+}
+
+.fit-list.long li {
+  display: block;
+}
+
+.decision-box {
+  margin-top: 12px;
   border: 1px solid var(--line-soft);
   border-radius: 10px;
   padding: 10px 12px;
@@ -317,8 +346,112 @@ a {
   color: var(--ink-200);
 }
 
-.decision p {
-  margin: 4px 0;
+.decision-box p {
+  margin: 5px 0;
+}
+
+.decision-box.expanded {
+  height: 100%;
+}
+
+.detail-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.detail-card {
+  border: 1px solid rgba(52, 84, 107, 0.85);
+  border-radius: 12px;
+  padding: 14px;
+  background: rgba(15, 28, 40, 0.86);
+}
+
+.detail-title-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.detail-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.detail-title-row span {
+  font-size: 12px;
+  color: var(--ink-300);
+}
+
+.detail-card header p {
+  margin: 7px 0 0;
+  color: var(--ink-300);
+  font-size: 13px;
+  line-height: 1.52;
+}
+
+.metric-inline {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.metric-inline div {
+  border: 1px solid rgba(54, 87, 111, 0.65);
+  border-radius: 10px;
+  background: rgba(21, 37, 51, 0.7);
+  padding: 8px 9px;
+}
+
+.metric-inline small {
+  display: block;
+  color: var(--ink-300);
+  font-size: 11px;
+}
+
+.metric-inline strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.detail-columns {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.detail-columns h4 {
+  margin: 0 0 4px;
+  color: #8ce7df;
+  font-size: 12px;
+}
+
+.detail-columns ul,
+.ordered-list {
+  margin: 0;
+  padding-left: 16px;
+  color: var(--ink-200);
+  font-size: 12.8px;
+  line-height: 1.52;
+  display: grid;
+  gap: 4px;
+}
+
+.ordered-list {
+  padding-left: 18px;
+}
+
+.roadmap.long {
+  grid-template-columns: 1fr;
+}
+
+.mt12 {
+  margin-top: 12px;
 }
 
 .roadmap {
@@ -383,6 +516,9 @@ td {
 @media (max-width: 1080px) {
   .list-grid,
   .summary-grid,
+  .detail-grid,
+  .metric-inline,
+  .detail-columns,
   .panel.two-col,
   .roadmap {
     grid-template-columns: 1fr;
