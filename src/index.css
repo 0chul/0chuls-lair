@@ -447,6 +447,23 @@ a {
   line-height: 1.5;
 }
 
+.devil-box ul {
+  margin: 6px 0 0;
+  padding-left: 16px;
+  color: #f7d2c7;
+  font-size: 12.5px;
+  line-height: 1.5;
+  display: grid;
+  gap: 4px;
+}
+
+.chart-note {
+  margin: 8px 0 0;
+  color: var(--ink-300);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .fit-list {
   margin: 10px 0 0;
   padding: 0;
