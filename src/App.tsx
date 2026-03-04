@@ -5,7 +5,6 @@ import {
   ArrowUpRight,
   BarChart3,
   Building2,
-  CheckCircle2,
   ExternalLink,
   FileText,
   HandCoins,
@@ -76,14 +75,6 @@ type BxSectionItem = {
   metrics: string[]
   evidence: string[]
   riskResponse: string[]
-}
-
-type BxStepItem = {
-  step: string
-  goal: string
-  inputs: string[]
-  outputs: string[]
-  check: string
 }
 
 type BxChecklistItem = {
@@ -367,56 +358,6 @@ const samhwaSources: SourceDoc[] = [
 const bxNotebookQueryMeta =
   'NotebookLM 질의 세션 e03b2126 (2026-03-04 캡처) + BX v4 사업계획서 업로드본 기반 작성안'
 
-const bxWritingPremise = [
-  '본 문안은 BX컨설팅 v4 사업계획서와 NotebookLM 검증 수치를 결합해 확정함.',
-  '심사 프레임은 Problem·Solution·Scale-up·Team 연결 논리로 일관되게 구성함.',
-  '협약기간(2026.5~12) 기준으로 기존 개발 일정을 재배열해 실현 가능성을 높임.',
-  '확정 수치(132건, 예산비율 70:30 준수, 11/30/100억 목표)와 가정 수치를 분리 표기함.',
-]
-
-const bxExecutionPlanSteps: BxStepItem[] = [
-  {
-    step: 'Step A (1일차) 기준값 확정',
-    goal: '공고값·기업값·평가축을 단일 기준으로 확정함',
-    inputs: [
-      '지원규모 535개사, 자금 최대 1억/평균 5천만, 협약 2026.5~12',
-      '설립일 2025-08-12, 법인사업자, 서울 송파 본사, 신청주체 기본정보',
-      '평가축 Problem/Solution/Scale-up/Team',
-    ],
-    outputs: ['요건 체크시트', '일반현황 표 원본', '사업개요 요약문'],
-    check: '수치·날짜·자격 문구가 본문 전 구간에서 동일하게 유지되는지 검증함',
-  },
-  {
-    step: 'Step B (2~3일차) 본문 작성',
-    goal: '양식 목차별 본문을 현재상태·실행·목표값으로 작성함',
-    inputs: [
-      '2025년 제안서 132건 수작업 처리 사례, 기대치 격차 73% vs 37%',
-      'Draft AI 5종 에이전트 구조, Self-Critique 루프, MVP 실증 기록',
-      '타깃시장 순서: 금융/교육컨설팅 → 공공조달 → 중소·중견 B2B',
-    ],
-    outputs: ['문제인식/실현가능성 본문', '성장전략 본문', '리스크 대응 문안'],
-    check: '모든 핵심 문장에 숫자, 근거, 실행주체 중 2개 이상 포함되는지 확인함',
-  },
-  {
-    step: 'Step C (4일차) 수치 정합화',
-    goal: 'BM·KPI·예산·일정 수치를 하나의 체계로 정렬함',
-    inputs: [
-      '매출 목표 2026년 11억, 2027년 30억, 2028년 100억',
-      '작성시간 90% 단축, 지식허브 1,000건+, 성능 95% 고도화 목표',
-      '비율 준수 예산안: 정부지원 100백만원, 자기부담 45백만원(현금 20/현물 25), 총 145백만원',
-    ],
-    outputs: ['사업화/재무 섹션 최종안', 'KPI-예산 매핑표', '차트 수치 동기화본'],
-    check: '본문·표·차트의 수치가 1:1로 일치하는지 교차 검증함',
-  },
-  {
-    step: 'Step D (5일차) 제출본 확정',
-    goal: '양식 제약을 지킨 최종본으로 패키징함',
-    inputs: ['검증 완료 원고', '최종 체크리스트', '출처 인덱스'],
-    outputs: ['최종 제출본(본문 10p 이내)', '심사 질의 대응 메모', '내부 실행 리스트'],
-    check: '목차/안내문구/마스킹/수치일관성 최종 점검을 완료함',
-  },
-]
-
 const bxFormMirrorSections: BxSectionItem[] = [
   {
     title: '□ 일반현황',
@@ -432,7 +373,7 @@ const bxFormMirrorSections: BxSectionItem[] = [
     ],
     metrics: [
       '협약기간은 2026년 5월~12월(8개월)로 확정함.',
-      '비율 준수 예산 예시안은 총사업비 145백만원으로 설계함.',
+      '정부지원금 상한(100백만원)을 반영해 총사업비 145백만원으로 설계함.',
       '지원분야는 지식서비스, 전문기술분야는 정보통신으로 고정함.',
     ],
     evidence: ['사업자등록증/법인등기', '일반현황 표 원본', '산출물 Definition of Done 표'],
@@ -617,7 +558,7 @@ const bxFormMirrorSections: BxSectionItem[] = [
       '외주비는 AWS 구축 자문 등 필수범위로 제한하고 산출물 검수기준을 명시함.',
     ],
     metrics: [
-      '예시 신청안은 정부지원 100백만원, 자기부담 45백만원(현금 20/현물 25)으로 운영함.',
+      '신청안은 정부지원 100백만원, 자기부담 45백만원(현금 20/현물 25)으로 운영함.',
       '비율은 정부 68.9%, 자기부담 31.1%로 공고 기준을 충족함.',
       '협약 종료 시 솔루션 v1.0, PoC 결과보고서, SI 계약 2~3건 확보를 목표로 설정함.',
     ],
@@ -1179,101 +1120,29 @@ function BxView({ onBack }: { onBack: () => void }) {
         <span className="hero-kicker">BX컨설팅 | 창업중심대학(지역기반)</span>
         <h1>2026 창업중심대학(지역기반) 사업계획서</h1>
         <p>
-          본 페이지는 BX컨설팅 Draft AI의 실제 사업계획서 본문입니다. 양식 목차 순서에 맞춰 현재 상태, 실행 계획,
-          정량 목표, 근거, 리스크 대응을 항목별 보고서 형식으로 정리했습니다.
+          본 페이지는 BX컨설팅 Draft AI의 제출용 사업계획서 본문입니다. 일반현황부터 조직구성까지 양식 목차 순서의
+          확정 문안을 배치했고, 하단 차트와 체크리스트는 내부 검토용 참고 부록으로 분리했습니다.
         </p>
         <div className="notice-box">
-          고정 수치(협약기간/비율 등)는 본문에 명시했으며, 제출 직전 최종 지원유형 공고와 일치 여부를 반드시 재확인해야
-          합니다. {bxNotebookQueryMeta}
-        </div>
-      </section>
-
-      <section className="summary-grid">
-        <article className="summary-card">
-          <div className="summary-head">
-            <Rocket size={16} /> 채점 프레임
-          </div>
-          <strong>Problem → Solution → Scale-up → Team</strong>
-          <p>문제의 크기, 해결의 실현성, 수익화 경로, 팀 수행력을 일관되게 증명</p>
-        </article>
-        <article className="summary-card">
-          <div className="summary-head">
-            <HandCoins size={16} /> 협약기간
-          </div>
-          <strong>2026년 5월 ~ 12월 (8개월)</strong>
-          <p>월별 1~2개 마일스톤 중심으로 개발+검증 병행 배치</p>
-        </article>
-        <article className="summary-card">
-          <div className="summary-head">
-            <TrendingUp size={16} /> 총사업비 구조(창업기업)
-          </div>
-          <strong>정부지원 70% 이하 / 자기부담 30% 이상</strong>
-          <p>자기부담 내 현금 10% 이상, 현물 20% 이하 기준으로 집행 설계</p>
-        </article>
-        <article className="summary-card">
-          <div className="summary-head">
-            <Landmark size={16} /> 작성 제한사항
-          </div>
-          <strong>양식 변경 불가 / 본문 10페이지 이내</strong>
-          <p>목차 페이지 삭제, 파란 안내문구 삭제, 개인정보 마스킹 준수</p>
-        </article>
-      </section>
-
-      <section className="panel">
-        <div className="panel-header">
-          <h2>작성 전제(심사위원 채점 프레임)</h2>
-        </div>
-        <div className="premise-grid">
-          {bxWritingPremise.map((item) => (
-            <article key={item} className="premise-card">
-              <CheckCircle2 size={15} />
-              <p>{item}</p>
-            </article>
-          ))}
+          정부지원금은 공고 상한인 100백만원(1억원)으로 고정하고, 총사업비 145백만원(정부 68.9%, 자기 31.1%,
+          현금 20/현물 25)으로 비율 기준을 충족했습니다. 제출 직전 최종 공고와 수치 일치 여부를 재확인해야 합니다.
+          {bxNotebookQueryMeta}
         </div>
       </section>
 
       <section className="panel">
         <div className="panel-header">
-          <h2>실행 계획(작성 프로세스 | Step A~D)</h2>
+          <h2>제출 본문 안내</h2>
         </div>
-        <div className="exec-grid">
-          {bxExecutionPlanSteps.map((step) => (
-            <article key={step.step} className="exec-card">
-              <header>
-                <span>{step.step}</span>
-                <h3>{step.goal}</h3>
-              </header>
-              <div className="exec-columns">
-                <div>
-                  <h4>입력물</h4>
-                  <ul>
-                    {step.inputs.map((input) => (
-                      <li key={input}>{input}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h4>산출물</h4>
-                  <ul>
-                    {step.outputs.map((output) => (
-                      <li key={output}>{output}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="devil-box">
-                <strong>검증 포인트</strong>
-                <p>{step.check}</p>
-              </div>
-            </article>
-          ))}
-        </div>
+        <p className="chart-note">
+          아래 섹션은 실제 제출 문안 기준으로 작성되었습니다. 본문은 지시형 문구를 제외하고 현재 상태, 실행 항목, 정량
+          목표 중심으로만 구성했습니다.
+        </p>
       </section>
 
       <section className="panel">
         <div className="panel-header">
-          <h2>양식 목차별 실사업계획서 본문</h2>
+          <h2>제출 본문(양식 목차 순서)</h2>
         </div>
         <div className="mirror-grid">
           {bxFormMirrorSections.map((section) => (
@@ -1322,6 +1191,16 @@ function BxView({ onBack }: { onBack: () => void }) {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="panel">
+        <div className="panel-header">
+          <h2>참고 부록(내부 검토용)</h2>
+        </div>
+        <p className="chart-note">
+          아래 자료는 제출 본문을 보완하는 내부 검토용 부록입니다. 차트, 점검표, 의사결정 메모는 제출용 원문과 동일 수치로
+          동기화해 관리합니다.
+        </p>
       </section>
 
       <section className="panel two-col">
@@ -1425,7 +1304,7 @@ function BxView({ onBack }: { onBack: () => void }) {
       <section className="panel two-col">
         <div>
           <div className="panel-header">
-            <h2>최종 점검 체크리스트(탈락 방지용)</h2>
+            <h2>참고 부록 | 제출 점검 체크리스트</h2>
           </div>
           <ul className="fit-list">
             {bxFinalChecklist.map((item) => (
@@ -1441,11 +1320,11 @@ function BxView({ onBack }: { onBack: () => void }) {
 
         <div>
           <div className="panel-header">
-            <h2>의사결정 핵심 메시지</h2>
+            <h2>참고 부록 | 의사결정 메모</h2>
           </div>
           <div className="decision-box expanded">
             <p>
-              1. <strong>문제정의:</strong> 연간 130건 수작업과 73/37 격차 지표를 기준 문제값으로 확정함.
+              1. <strong>문제정의:</strong> 연간 132건 수작업과 73/37 격차 지표를 기준 문제값으로 확정함.
             </p>
             <p>
               2. <strong>실행경로:</strong> 2026년 SI 레퍼런스 확보 후 2027년 SaaS 전환을 본 전략으로 채택함.
