@@ -34,4 +34,4 @@ npm run build
 npm run deploy
 ```
 
-`vite.config.ts` base is set to `/0chuls-lair/`.
+`vite.config.ts` base is set to `./` so it works in local preview and GitHub Pages path environments.
