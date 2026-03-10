@@ -82,6 +82,24 @@ type BxChecklistItem = {
   criterion: string
 }
 
+type BxKpiItem = {
+  id: string
+  label: string
+  before: number
+  after: number
+  target: number
+  unit: string
+  better: 'lower' | 'higher'
+  note: string
+}
+
+type BxWorkflowStep = {
+  id: string
+  title: string
+  detail: string
+  output: string
+}
+
 const samhwaNotebookUrl =
   'https://notebooklm.google.com/notebook/bef72a22-da35-42f5-b92e-6074e8ac0b6e'
 const bxNotebookUrl =
@@ -106,9 +124,9 @@ const reportCards: ReportCard[] = [
     subtitle: 'BX컨설팅 Draft AI 사업계획서 본문(일반현황~조직구성)',
     icon: Rocket,
     bullets: [
-      '양식 목차 순서에 맞춘 실사업계획서 문안 탑재',
-      '현재 상태·실행 계획·정량 목표를 항목별 보고서 톤으로 명시',
-      '협약기간(2026.5~12) 일정/예산/성과 지표를 동일 수치로 연동',
+      '사용자 제공 제출서류 기준으로 목차별 본문을 재작성',
+      '일반현황~조직구성까지 수치·일정·예산 정합성 동기화',
+      '인터랙티브 KPI 비교, 간트차트, 워크플로우 다이어그램 제공',
     ],
     sourceUrl: bxNotebookUrl,
   },
@@ -355,367 +373,451 @@ const samhwaSources: SourceDoc[] = [
   },
 ]
 
-const bxNotebookQueryMeta =
-  'NotebookLM 질의 세션 e03b2126 (2026-03-04 캡처) + BX v4 사업계획서 업로드본 기반 작성안'
+const bxNotebookQueryMeta = 'NotebookLM 자료 + 사용자 제공 제출서류(2026-03-10) 반영'
+
+const bxBudgetPlan = {
+  gov: 100,
+  cash: 15,
+  inKind: 28,
+  total: 143,
+}
+
+const bxPercent = (value: number, total: number) => Number(((value / total) * 100).toFixed(1))
+const bxSelfAmount = bxBudgetPlan.cash + bxBudgetPlan.inKind
+const bxGovRatio = bxPercent(bxBudgetPlan.gov, bxBudgetPlan.total)
+const bxSelfRatio = bxPercent(bxSelfAmount, bxBudgetPlan.total)
+const bxCashRatio = bxPercent(bxBudgetPlan.cash, bxBudgetPlan.total)
+const bxInKindRatio = bxPercent(bxBudgetPlan.inKind, bxBudgetPlan.total)
 
 const bxFormMirrorSections: BxSectionItem[] = [
   {
     title: '□ 일반현황',
     diagnosis: [
-      '비엑스컨설팅은 2025-08-12 설립된 법인사업자임.',
-      '본사 소재지는 서울 송파구이며, 지식서비스/정보통신 분야로 분류함.',
-      '창업아이템은 AI 기반 B2B 제안서 자동 생성 SaaS 솔루션 Draft AI임.',
+      '기업명은 주식회사 비엑스컨설팅이며 2025.08.12 개업 법인사업자임.',
+      '사업자등록번호 625-87-03471 / 법인등록번호 110111-0934324를 기준값으로 고정함.',
+      '본사 소재지는 서울특별시 송파구 중대로 121, 2층이며 대표자 유형은 단독임.',
     ],
     execution: [
-      '기업 기본정보는 사업자등록증·법인등기 기준값과 동일하게 고정 입력함.',
-      '협약 산출물은 Draft AI 솔루션 v1.0, 나라장터 PoC 결과보고서, SI 계약 2~3건으로 정의함.',
-      '인력 정보는 직책/역할 중심으로 표기하고 개인식별 정보는 비노출 처리함.',
+      '창업아이템은 Draft AI: AI 기반 B2B 제안서 초안 자동화 및 검증 솔루션으로 확정함.',
+      '협약 산출물은 Beta v1.0 1식, 외부 실증 결과보고서 2건, 정량 성과 리포트 1부로 정의함.',
+      '팀 정보는 이름을 제외하고 직책·담당업무·경력 중심으로 비식별 표기함.',
     ],
     metrics: [
-      '협약기간은 2026년 5월~12월(8개월)로 확정함.',
-      '정부지원금 상한(100백만원)을 반영해 총사업비 145백만원으로 설계함.',
-      '지원분야는 지식서비스, 전문기술분야는 정보통신으로 고정함.',
+      '정부지원사업비 100,000,000원, 자기부담 현금 15,000,000원, 현물 28,000,000원으로 편성함.',
+      `총사업비는 143,000,000원이며 비율은 정부 ${bxGovRatio}% / 자기 ${bxSelfRatio}% / 현금 ${bxCashRatio}% / 현물 ${bxInKindRatio}%임.`,
+      '지원분야는 지식서비스, 전문기술분야는 정보·통신으로 고정함.',
     ],
-    evidence: ['사업자등록증/법인등기', '일반현황 표 원본', '산출물 Definition of Done 표'],
+    evidence: ['사업자등록증/법인등기', '총사업비 구성 계획표', '팀 구성 현황표'],
     riskResponse: [
-      '기업 고유정보 오기재 리스크는 제출 전 증빙-본문 대조표로 차단함.',
-      '산출물 과대기재 리스크는 완료조건(문서/계약/운영증빙) 병기로 통제함.',
+      '기본정보 오기재 리스크는 제출본-증빙 서류 1:1 대조로 통제함.',
+      '팀 구성 상태의 변동 가능성은 주임 배치일 최종 확인 후 즉시 반영함.',
     ],
   },
   {
     title: '□ 개요(요약)',
     diagnosis: [
-      'Draft AI는 RFP 분석부터 PPTX 초안 생성까지 B2B 제안 핵심 공정을 자동화함.',
-      '핵심 문제는 제안 작성의 과다 시간 소모와 품질 편차, 낮은 고객 체감가치임.',
-      '해결 전략은 온프레미스 SI 레퍼런스 확보 후 구독형 SaaS로 확장하는 이중 구조임.',
+      'Draft AI는 요구사항 정리-근거 탐색-초안 작성-검토 수정을 하나의 워크플로우로 통합함.',
+      '핵심 병목은 숙련자 의존 수작업, 반복 수정 라운드, 제출 직전 누락/형식 오류임.',
+      '당사는 금융권 AI 워크플로우 자동화 교육·실습 1건 납품 완료, 1건 진행으로 초기 신뢰를 확보함.',
     ],
     execution: [
-      '요약문은 문제-해결-실행-수익화-팀 역량 순으로 단문 보고서 형식으로 작성함.',
-      '지원금 사용처는 에이전트 고도화, 실증, 초기 계약 전환 중심으로 배치함.',
-      '파트너사 연계 계획을 요약단에서 명시해 판로 가능성을 선제 증명함.',
+      '현재 단계는 내부 시나리오 기반 MVP 테스트 단계로 제품화 전환을 진행함.',
+      '2025.11~2026.03 동안 민간 제안서 10건 기준 50회 테스트 케이스를 운영함.',
+      '지역기반 사업에서는 지역 실증 고객 확보 후 전국 확산 2단계 전략으로 전개함.',
     ],
     metrics: [
-      '지원규모 535개사 내외를 기준값으로 사용함.',
-      '사업화 자금 최대 1억, 평균 5천만 원을 반영함.',
-      '작성시간 90% 단축, 2026년 매출 11억 달성을 핵심 KPI로 설정함.',
+      '초안 작성시간: 3시간 → 5분.',
+      '수정 라운드: 6회 → 2회, 필수항목 누락: 3개 → 0개.',
+      '근거 인용 포함률: 20% → 80%.',
     ],
-    evidence: ['모집공고 요약', '사업개요 원문(v4)', '요약 KPI 표'],
+    evidence: ['내부 테스트 로그 50건', '금융권 교육·실습 납품 산출물', 'KPI 전후 비교표'],
     riskResponse: [
-      '요약-본문 불일치 리스크를 막기 위해 핵심 수치를 단일 데이터셋으로 관리함.',
-      '수식어 중심 문장을 배제하고 수치·행동 중심 단문으로 통일함.',
+      '내부 테스트 성과를 외부 실증 성과로 과대해석하지 않도록 KPI 재현성 검증을 별도 수행함.',
+      '초기 도입 장벽(보안/승인/자료 표준화)은 실증 온보딩 문서로 선제 대응함.',
     ],
   },
   {
-    title: '1-1. 문제인식(Problem) - 배경 및 필요성',
+    title: '1-1. 문제인식(Problem) - 창업아이템 배경 및 필요성',
     diagnosis: [
-      '2025년 제안서 132건을 수작업으로 처리해 고급 인력 시간이 과다 투입됨.',
-      '제안 품질이 작성자 역량에 의존해 결과물 편차와 리워크 비용이 누적됨.',
-      '고객 기대치와 실제 체감 간 격차(73% 기대 vs 37% 체감)가 고착화됨.',
+      'B2B 문서 업무의 핵심 문제는 작성 자체보다 정리·연결·검증 단계의 비효율임.',
+      '수작업 기반 제안 프로세스는 시간 소모, 품질 편차, 제출 직전 리스크를 반복 발생시킴.',
+      '범용 생성형 AI는 초안 속도는 높지만 통제·추적·형식검증 수준이 실무 요구에 미달함.',
     ],
     execution: [
-      '문제 구조를 시간(리드타임), 비용(기회비용), 품질(일관성) 3축으로 재정의함.',
-      '수작업·외주·단일생성AI 대안의 한계를 비교해 자동화 우선 영역을 도출함.',
-      '내부자료 단절, 검증 루프 부재, 도메인 맥락 반영 부족을 핵심 원인으로 확정함.',
+      '외부 배경: 문서 품질과 속도가 영업·입찰 성과를 직접 좌우하는 환경으로 전환됨.',
+      '내부 배경: 금융권/대기업 AI 교육·실습 수행 과정에서 프로세스형 자동화 니즈를 확인함.',
+      '추진 경과: 2025.11 문제정의 → 2025.12~2026.01 MVP 설계 → 2026.01~03 테스트 50회 수행.',
     ],
     metrics: [
-      '기준 문제지표는 연간 132건 수작업 처리값으로 고정함.',
-      '기대치 격차 지표 73%/37%를 문제 크기 값으로 고정함.',
-      '개선 목표는 작성시간 90% 단축으로 설정함.',
+      '테스트 대상 문서: 민간 제안서 10건.',
+      '테스트 횟수: 총 50회 케이스 운영.',
+      '핵심 문제축: 시간(초안/검토)·품질(누락/근거)·확장성(숙련자 의존).',
     ],
-    evidence: ['v4 문제인식 본문', '고객 미팅 로그', '프로세스 분석 메모'],
+    evidence: ['문제정의 노트', '업무 흐름 분석 문서', 'KPI 측정 체계 문서'],
     riskResponse: [
-      '문제 과장 리스크를 막기 위해 내부 실적 수치와 외부 지표를 분리 표기함.',
-      '출처 없는 시장주장 문장은 본문 반영 금지 원칙으로 통제함.',
+      '문제 서술의 추상화를 막기 위해 실제 테스트 데이터 기반으로 본문을 고정함.',
+      '요구사항 변동이 큰 고객군은 실증 범위에서 단계적으로 편입함.',
     ],
   },
   {
-    title: '1-2. 문제인식(Problem) - 목표시장 현황 분석',
+    title: '1-2. 문제인식(Problem) - 목표시장(고객) 현황 분석',
     diagnosis: [
-      '1차 타깃은 금융권·교육컨설팅 대형 제안 조직으로 정의함.',
-      '2차 타깃은 공공입찰 참여기업과 일반 B2B 제안 조직으로 확장함.',
-      '도입 결정요인은 보안성, 도메인 정확도, 제안 리드타임 단축으로 확인됨.',
+      '초기 목표시장: 대기업/계열사/공공기업, 컨설팅·교육·SI 조직의 반복 제안서 수요군.',
+      '2차 목표시장: 보안 민감도가 높은 금융권·엔터프라이즈 내부형 도입 수요군.',
+      '중장기 시장: 공공조달·나라장터 등 서식 규정이 강한 문서 시장.',
     ],
     execution: [
-      '시장 세분화는 우선 진입군 중심 SAM/SOM 역산 방식으로 산정함.',
-      '경쟁구조는 수작업·외주·범용AI·전문 솔루션 4개 군으로 비교함.',
-      '초기 영업은 기존 네트워크가 있는 고부가 B2B 고객군에 집중함.',
+      '민간 제안서 중심 표준형 제품을 먼저 완성하고 공공조달 특화 모듈은 후속 개발함.',
+      '진입전략은 트랙A(기존 네트워크) + 트랙B(지역 실증 확산) 병행으로 운영함.',
+      '고객 요구사항은 제출 가능 형식, 누락 검증, 근거 연결, 사용자 검토 구조, 보안성으로 정리함.',
     ],
     metrics: [
-      '2026년 온프레미스 SI 2~3건 수주를 1차 시장 KPI로 설정함.',
-      '2027년 유료 고객사 100개 확보 목표를 반영함.',
-      '시장 확장 단계는 2026 진입 → 2027 확장 → 2028 스케일업으로 운영함.',
+      '협약기간 실증 고객 2개사 확보.',
+      '실증 적용 문서 최소 10건 이상 운영.',
+      '추가 파트너/도입의향 1~2건 확보.',
     ],
-    evidence: ['시장 세분화 시트', '경쟁 매트릭스', '채널 인터뷰 요약'],
+    evidence: ['시장 세그먼트 정의서', '요구사항 정리표', '실증 후보군 리스트'],
     riskResponse: [
-      '타깃 과분산 리스크는 산업별 우선순위와 영업 리소스 상한으로 통제함.',
-      '레퍼런스 확보 전 SaaS 대규모 확장 집행을 제한함.',
+      '공공조달 확장을 협약기간 내 핵심 목표로 과도 설정하지 않고 후속 단계로 분리함.',
+      '채널 의존 리스크는 기존 네트워크와 지역기관 채널을 병행해 완화함.',
     ],
   },
   {
     title: '2-1. 실현가능성(Solution) - 개발/개선 준비현황',
     diagnosis: [
-      'Draft AI는 핵심 기능 MVP를 구현하고 고객 시나리오 실증을 완료함.',
-      '5종 에이전트(RFP 분석/트렌드 리서치/커리큘럼 매칭/조립/품질평가)를 확보함.',
-      'RAG 기반 검색-생성 구조와 Human-in-the-Loop UX를 동시 설계함.',
+      'Draft AI는 내부 MVP 단계에 진입했으며 문서 입력-구조화-초안생성-검증 4단계를 구축함.',
+      '성과 측정 로그(시간/라운드/누락/인용률)를 이미 운영해 정량 검증 기반을 확보함.',
+      '현업 니즈(보안, 승인, 자료 표준화 수준)를 기능 우선순위에 반영한 상태임.',
     ],
     execution: [
-      '현재 단계는 MVP 검증 완료, 상용 전환 직전 단계로 정의함.',
-      '자동차그룹 CES 교육 시나리오 기준으로 기능 정확도와 추천 적합도를 검증함.',
-      '검증 산출물은 로그, 피드백, 개선 이력으로 통합 관리함.',
+      '민간 제안서 구조 분석으로 필수항목 체크리스트 자동화 기능을 설계함.',
+      '근거자료 기반 초안 생성과 수정 포인트 출력 기능을 MVP에서 검증함.',
+      '금융권 교육·실습 납품 접점에서 PoC 전환 가능한 고객 접점을 확보함.',
     ],
     metrics: [
-      '에이전트 성능 95% 이상 고도화를 목표로 설정함.',
-      '지식허브 데이터 1,000건 이상 구조화를 목표로 설정함.',
-      '협약기간 내 파일럿 2건과 나라장터 PoC 1건 수행을 목표로 설정함.',
+      '초안 작성시간 180분 → 5분.',
+      '수정 라운드 6회 → 2회, 필수항목 누락 3개 → 0개.',
+      '근거 인용 포함률 20% → 80%.',
     ],
-    evidence: ['MVP 테스트 로그', '실증 시나리오 결과표', '파트너 검토 기록'],
+    evidence: ['MVP 기능 점검표', '테스트 로그(10건/50회)', '초기 납품 실적 문서'],
     riskResponse: [
-      'MVP 성공을 상용 안정성으로 과대해석하지 않도록 범위를 분리 명시함.',
-      '미검증 기능은 차기 고도화 항목으로 별도 분류해 일정 리스크를 차단함.',
+      '내부 테스트와 외부 실무 환경 간 격차는 실증 단계에서 템플릿 미세조정으로 대응함.',
+      '문서 유형 다양성 리스크는 유형별 룰셋 자산화를 통해 단계적 해소함.',
     ],
   },
   {
-    title: '2-2. 실현가능성(Solution) - 실현 및 고도화 방안',
+    title: '2-2. 실현가능성(Solution) - 실현 및 구체화/고도화 방안',
     diagnosis: [
-      '협약기간 내 기능 고도화와 실증 결과 확보를 동시에 달성해야 함.',
-      'AI 생성품질은 자기개선 루프와 전문가 검수 병행이 필수 조건임.',
-      '데이터 거버넌스와 지식재산 보호 체계를 함께 구축해야 확장 리스크가 낮아짐.',
+      '협약기간 핵심 목표는 민간 제안서 중심 Draft AI Beta v1.0 완성과 외부 실증 2건임.',
+      '차별화 핵심은 생성 기능이 아니라 누락·형식·근거 검증 레이어의 제품화임.',
+      '기술보호는 브랜드/룰셋/검증로직/템플릿 자산 관리로 다층 설계가 필요함.',
     ],
     execution: [
-      '5~7월에 5종 에이전트와 멀티스텝 UX를 고도화함.',
-      '8~9월에 베타 테스트와 Critique-Refine 개선 사이클을 반복 적용함.',
-      '10~11월에 나라장터 PoC와 온프레미스 SI 제안 실증을 병행함.',
-      '12월에 Draft AI v1.0 결과물과 성과보고서를 확정 제출함.',
+      '요구사항 구조화 정확도, 근거 인용 처리, 검증 리포트 자동화를 우선 고도화함.',
+      '출력 형식(PDF/PPT/문서) 안정화와 실증 온보딩 프로세스를 협약기간 내 고정함.',
+      '단기(2026): Beta/PoC/성과리포트, 중기(2027H1): 권한·보안 확장, 장기(2027H2+): 공공조달 모듈로 전개함.',
     ],
     metrics: [
-      '협약 종료 시 Draft AI v1.0 운영본 1식을 제공함.',
-      '품질 평가는 요구사항 충족도·논리성·설득력 3축으로 월 단위 관리함.',
-      '초기 SI 계약 2~3건 수주를 실현가능성 최종 지표로 설정함.',
+      'Draft AI Beta v1.0 1식: 2026.12 완료.',
+      '외부 실증(PoC) 결과보고서 2건: 2026.11~12 완료.',
+      '정량 성과 리포트 1부: 2026.12 완료.',
     ],
-    evidence: ['개발 일정표', 'PoC 운영 기록', '품질 점검표', '기술보호 실행안'],
+    evidence: ['협약기간 로드맵', '고도화 백로그', '기술보호 실행 체크리스트'],
     riskResponse: [
-      '일정지연은 기능 우선순위 재조정으로 즉시 대응함.',
-      '품질이슈는 자기개선 루프와 전문가 검수 병행으로 통제함.',
-      '보안이슈는 온프레미스 옵션 및 접근권한 통제로 대응함.',
+      '기능 확장 욕심으로 일정이 지연되지 않도록 협약 초기 범위 고정을 시행함.',
+      '외주 품질 리스크는 출력 모듈 검수 기준과 인수조건을 계약서에 명시해 통제함.',
     ],
   },
   {
     title: '3-1. 성장전략(Scale-up) - 비즈니스 모델',
     diagnosis: [
-      '초기 고객은 데이터 보안 요구가 높은 대기업군으로 형성됨.',
-      '초기 수익모델은 온프레미스 SI, 중기 수익모델은 구독형 SaaS로 구분함.',
-      'AI 해커톤/워크숍은 리드 확보와 부가매출 동시 창출 채널로 유효함.',
+      '수익모델은 PoC/도입 패키지형(1단계)과 구독형 SaaS(2단계)로 설계함.',
+      '초기에는 교육·실습 연계형 진입으로 도입 저항을 낮추는 구조가 효과적임.',
+      '중장기에는 기업형 보안/관리 옵션을 별도 과금해 ARPU를 확장함.',
     ],
     execution: [
-      '2026년 온프레미스 SI 프로젝트로 초기 레퍼런스를 확보함.',
-      '검증된 기능을 표준화해 2027년 구독형 SaaS 출시로 전환함.',
-      'SI 고객 갱신 시 SaaS 업셀과 추가 모듈 판매를 병행함.',
+      '1단계에서 요구사항 정의·템플릿 세팅 포함 프로젝트형 매출을 확보함.',
+      '2단계에서 사용자 수/처리 문서 수/템플릿 수 기준 요금제를 적용함.',
+      '납품 레퍼런스를 실증 사례집으로 전환해 반복 세일즈 재료로 자산화함.',
     ],
     metrics: [
-      '매출 목표는 2026년 11억, 2027년 30억, 2028년 100억으로 설정함.',
-      '2027년 유료 고객사 100개 확보를 사업화 기준으로 설정함.',
-      '2026년 온프레미스 SI 2~3건, 2027년 SaaS 본전환을 달성 목표로 설정함.',
+      '협약기간 내 제품 직접 매출보다 PoC 전환율과 실증 성과 재현성을 우선 KPI로 둠.',
+      '협약 종료 후 상용 SaaS 전환 및 반복매출 구조 전환을 목표로 함.',
+      '도입 패키지형 매출에서 구독형 전환 비중을 단계적으로 확대함.',
     ],
-    evidence: ['매출 목표표', '전환 퍼널 정의서', '채널별 영업 실적 데이터'],
+    evidence: ['수익모델 설계안', '요금제 초안', '도입 패키지 구성안'],
     riskResponse: [
-      'SI 의존 장기화 리스크는 SaaS 전환 KPI로 통제함.',
-      '가격 저항 리스크는 단계형 요금제와 파일럿 할인으로 대응함.',
+      '프로젝트형 매출 편중 리스크는 SaaS 표준 기능 출시 일정 준수로 완화함.',
+      '가격 저항 리스크는 체험형 데모/워크숍으로 도입 체감가치를 선제 제공해 대응함.',
     ],
   },
   {
     title: '3-2. 성장전략(Scale-up) - 시장 진입 및 사업화 전략',
     diagnosis: [
-      '초기 진입은 기존 B2B 네트워크를 활용한 파트너 동반 영업이 가장 빠름.',
-      '공공조달 시장은 나라장터 양식/요건 대응 기능이 선행되어야 진입 가능함.',
-      '리드-전환 퍼널을 월 단위로 운영하지 않으면 수주 속도 확보가 어려움.',
+      '전국형 제품이지만 지역기반 사업에서는 지역 실증/확산 인프라를 진입엔진으로 활용함.',
+      '트랙A(기존 금융·대기업 네트워크)와 트랙B(지역기관 실증 채널)의 병행이 핵심임.',
+      '초기 고객 획득은 문서 자동화 데모/교육 연계 방식이 가장 전환율이 높음.',
     ],
     execution: [
-      '엑스퍼트컨설팅을 퍼스트 커스터머로 지정해 실사용 검증을 수행함.',
-      '컨슈머인사이트 데이터 연계를 통해 프리미엄 제안 근거를 강화함.',
-      'AI 해커톤/워크숍을 리드 확보 채널로 운영해 SI 파이프라인으로 전환함.',
+      '협약기간 내 Beta v1.0 실증형 출시와 데모 세션 운영을 병행함.',
+      '엑스퍼트컨설팅 채널과 지역 프로그램 연계로 PoC 고객 2곳을 조기 확보함.',
+      '실증 결과를 요금체계/도입 프로세스 표준안으로 문서화해 확산 기반을 마련함.',
     ],
     metrics: [
-      '2026년 SI 2~3건 + 나라장터 PoC 1건 확보를 1차 사업화 목표로 설정함.',
-      '2027년 유료 고객사 100개 확보와 유지율 개선을 목표로 설정함.',
-      '작성시간 90% 단축 KPI를 영업 제안 가치지표로 표준 적용함.',
+      '외부 실증 고객 2개사 확보.',
+      '초안 작성시간 1건 20분 이내 또는 수작업 대비 80% 이상 단축.',
+      '수정 라운드 평균 3회 이하, 필수항목 누락 0개, 근거 인용률 70% 이상 유지.',
     ],
-    evidence: ['채널 실행표', '퍼널 KPI 리포트', 'PoC 결과 보고서'],
+    evidence: ['채널 운영계획', '실증 운영계획서', '성과지표 정의서'],
     riskResponse: [
-      '채널 과분산 리스크는 파트너 2개사 우선 집중 정책으로 통제함.',
-      '전환 지연 리스크는 PoC 범위 축소와 의사결정자 동시 미팅으로 대응함.',
+      '실증 고객 모집 지연 리스크는 지역기관/기존 네트워크 동시 모집으로 대응함.',
+      '단일 파트너 의존 리스크는 협약기간 중 추가 접점 1~2건 확보로 분산함.',
     ],
   },
   {
     title: '3-3. 성장전략(Scale-up) - 추진 일정 및 자금 운용 계획',
     diagnosis: [
-      '협약기간 8개월 내 개발·검증·사업화를 병행해야 하는 구조임.',
-      '총사업비는 정부지원 70% 이하, 자기부담 30% 이상 기준으로 재설계함.',
-      '예산항목과 KPI 연결이 약하면 집행 타당성 심사에서 불리함.',
+      '2025.11~2026.03 MVP 검증 단계 이후, 협약기간(2026.05~12) 제품화/실증 단계로 진입함.',
+      '협약기간 핵심 게이트는 Beta v1.0 완성, 실증 2건 완료, KPI 재현성 확보임.',
+      '자금은 인건비·클라우드/모델비·출력 안정화·실증 운영비 중심으로 집행함.',
     ],
     execution: [
-      '5월 착수 후 6~7월 핵심개발, 8~9월 베타/해커톤, 10~11월 PoC/SI, 12월 결과정리로 추진함.',
-      '인건비, 클라우드/LLM 비용, 기자재, 임대/수수료 항목을 성과 KPI와 직접 연계함.',
-      '외주비는 AWS 구축 자문 등 필수범위로 제한하고 산출물 검수기준을 명시함.',
+      '전체 로드맵: MVP 검증 → Beta 개발/실증 → 상용화 준비 → 2027 SaaS 전환.',
+      '협약 마일스톤: 5월 범위확정, 6~8월 개발, 7~10월 실증, 11~12월 보고/사업화 정리.',
+      '자금조달은 자기부담 투입 + 협약 종료 후 PoC/초기 SaaS 매출 기반 재투자를 기본축으로 설정함.',
     ],
     metrics: [
-      '신청안은 정부지원 100백만원, 자기부담 45백만원(현금 20/현물 25)으로 운영함.',
-      '비율은 정부 68.9%, 자기부담 31.1%로 공고 기준을 충족함.',
-      '협약 종료 시 솔루션 v1.0, PoC 결과보고서, SI 계약 2~3건 확보를 목표로 설정함.',
+      '총사업비 143,000,000원 / 정부 100,000,000원 / 현금 15,000,000원 / 현물 28,000,000원.',
+      `비율은 정부 ${bxGovRatio}%, 자기 ${bxSelfRatio}%, 현금 ${bxCashRatio}%, 현물 ${bxInKindRatio}%로 기준 충족.`,
+      '주요 집행 항목: 인건비 75백만원, API·클라우드·데이터 20백만원, 외주 12백만원, 기자재 8백만원, 운영비 13백만원.',
     ],
-    evidence: ['월별 마일스톤 표', '사업비 구성표', '예산-KPI 매핑표'],
+    evidence: ['사업 추진 일정표', '사업비 집행계획안', '자금 필요성·조달계획서'],
     riskResponse: [
-      '집행 지연 리스크는 월 단위 집행률 점검과 항목 재배정으로 통제함.',
-      '예산 초과 리스크는 기능 우선순위 조정과 필수비용 우선 집행으로 대응함.',
+      '집행 지연 리스크는 월별 집행률 점검과 항목 재배정 룰로 통제함.',
+      '과집행 리스크는 필수기능 우선 원칙과 단계별 지출 승인으로 차단함.',
     ],
   },
   {
-    title: '4-1. 조직구성(Team) - 조직 역량',
+    title: '4-1. 조직구성(Team) - 대표자 및 조직 역량',
     diagnosis: [
-      '핵심조직은 대표·팀장·선임·주임·개발 매니저 5인 체계로 운영함.',
-      '주요 경력은 25년, 12년, 8년+, 1년, 12년으로 역할별 전문성을 확보함.',
-      '컨설팅 도메인 역량과 AI 개발 역량을 동일 팀 내에서 결합 운용함.',
+      '조직은 대표(총괄), 팀장(기획·마케팅), 선임(컨설팅), 매니저(AI개발), 주임(운영지원) 구조임.',
+      '핵심 인력은 각 역할에서 1~12년 이상 실무경험을 보유하고 있으며 이름은 비노출 처리함.',
+      '기획-현장-개발 인력이 단일팀으로 운영돼 피드백 반영 속도가 빠름.',
     ],
     execution: [
-      '대표는 사업총괄/대외협력, 팀장은 기획·마케팅, 개발 매니저는 AI 시스템을 전담함.',
-      '선임·주임은 컨설팅/사업수행을 분담해 제안 도메인 품질을 관리함.',
-      '필요 시 협약 중후반에 실무형 인력 1명 내외를 탄력 채용함.',
+      '대표는 제품전략/고객개발/실증 총괄, 팀장은 0→1 사업기획과 마케팅 실행을 담당함.',
+      '선임·주임은 실증 운영, 문서 수집·정리, 피드백 반영, KPI 기록 체계를 운영함.',
+      '매니저는 시스템 구현과 운영 안정화, 성능·보안 개선을 전담함.',
     ],
     metrics: [
-      '핵심 업무 오너 지정률 100%를 유지함.',
-      '주간 운영회의와 월간 성과리뷰를 고정 운영함.',
-      '협약기간 내 핵심역량 공백 0건을 조직 KPI로 관리함.',
+      '협약기간 핵심 업무 오너 100% 지정.',
+      '실증 운영·온보딩 담당 인력 2026.06 투입 계획.',
+      '템플릿/QA 보강 인력은 2026.07~08 선택 채용으로 운영.',
     ],
-    evidence: ['역할 매트릭스', '인력 투입 계획표', '주간 운영 리포트'],
+    evidence: ['팀 구성 현황표', '역할-책임 매트릭스', '인력 활용 계획표'],
     riskResponse: [
-      '핵심인력 과부하 리스크는 업무 우선순위 조정과 역할 분산으로 대응함.',
-      '의사결정 지연 리스크는 주간 의사결정 슬롯 고정으로 대응함.',
+      '인력 과부하 리스크는 실증 운영 전담 배치와 우선순위 재조정으로 대응함.',
+      '핵심인력 공백 리스크는 업무 매뉴얼·로그 기반 인수인계 체계로 완화함.',
     ],
   },
   {
-    title: '4-2. 조직구성(Team) - 외부 네트워크 활용 계획',
+    title: '4-2. 조직구성(Team) - 외부 네트워크 현황 및 활용 계획',
     diagnosis: [
-      '외부 파트너는 퍼스트 커스터머 확보와 데이터 경쟁력 강화의 핵심 축임.',
-      '엑스퍼트컨설팅은 실사용 검증과 공동 제안 채널에서 즉시 활용 가능함.',
-      '컨슈머인사이트 연계는 정량 리서치 기반 제안서 품질 향상에 직접 기여함.',
+      '지역기반 사업의 핵심은 지역 고객 한정이 아니라 지역 실증·확산 인프라 활용임.',
+      '핵심 네트워크는 지역 창업중심대학/유관기관, 엑스퍼트컨설팅, 기존 납품 고객군으로 구성함.',
+      '외부 네트워크는 실증 고객 모집, PoC 고도화, 후속 확산 채널 역할을 수행함.',
     ],
     execution: [
-      '엑스퍼트컨설팅과 공동 PoC를 통해 초기 도입사례를 확보함.',
-      '컨슈머인사이트 데이터 소스를 통합해 프리미엄 공동 오퍼링을 구성함.',
-      '파트너 협업은 분기별 목표와 월간 실행로그로 관리함.',
+      '지역 주관기관과 실증 참여 조직 모집 및 데모/발표 기회를 연계함.',
+      '엑스퍼트컨설팅 채널로 초기 PoC 후보를 발굴하고 요구사항 정리를 공동 수행함.',
+      '기존 납품 고객군 피드백을 통해 보안 요구사항과 도입 장벽을 사전 반영함.',
     ],
     metrics: [
-      '파트너 채널 기반 SI 2~3건 수주를 협약기간 핵심 KPI로 관리함.',
-      '공동 PoC 1건 이상을 사업화 전환 게이트로 적용함.',
-      '협업 시작시점은 2026년 1분기 준비, 협약기간 내 실행으로 연계함.',
+      '협약기간 내 실증 기반 파트너 접점 1~2건 추가 확보.',
+      '지역기관 연계 실증 확산 채널 최소 1개 이상 확보.',
+      '단일 채널 의존도 완화를 위한 병행 채널 운영률 100% 유지.',
     ],
-    evidence: ['파트너 협의 문서', '공동 PoC 계획서', '채널 실행 로그'],
+    evidence: ['협력기관 활용계획', 'PoC 후보군 목록', '채널 실행 로그'],
     riskResponse: [
-      '파트너 의존 리스크는 직접 영업 채널 병행 운영으로 완화함.',
-      '협업 지연 리스크는 분기별 공동 KPI와 책임자 지정으로 대응함.',
+      '특정 파트너 의존 리스크는 엑스퍼트 채널+지역기관 채널 병행 운영으로 대응함.',
+      '협업 지연 리스크는 월간 공동 KPI 리뷰와 담당자 지정으로 통제함.',
     ],
   },
 ]
 
-const bxEvaluationRadar = [
-  { axis: 'Problem', score: 96 },
-  { axis: 'Solution', score: 94 },
-  { axis: 'Scale-up', score: 92 },
-  { axis: 'Team', score: 93 },
+const bxKpiComparison: BxKpiItem[] = [
+  {
+    id: 'draft-time',
+    label: '초안 작성시간',
+    before: 180,
+    after: 5,
+    target: 20,
+    unit: '분',
+    better: 'lower',
+    note: '민간 제안서 10건, 50회 테스트 평균',
+  },
+  {
+    id: 'revision-round',
+    label: '수정 라운드',
+    before: 6,
+    after: 2,
+    target: 3,
+    unit: '회',
+    better: 'lower',
+    note: '검토-재수정 반복 횟수 기준',
+  },
+  {
+    id: 'missing-items',
+    label: '필수항목 누락',
+    before: 3,
+    after: 0,
+    target: 0,
+    unit: '개',
+    better: 'lower',
+    note: '제출 직전 체크리스트 기준',
+  },
+  {
+    id: 'citation-rate',
+    label: '근거 인용 포함률',
+    before: 20,
+    after: 80,
+    target: 70,
+    unit: '%',
+    better: 'higher',
+    note: '근거 연결 기능 적용 후 평균',
+  },
+]
+
+const bxWorkflowSteps: BxWorkflowStep[] = [
+  {
+    id: 'input',
+    title: '문서 입력',
+    detail: 'RFP, 기존 제안서, 내부 레퍼런스 문서를 업로드하고 처리 가능한 단위로 분해함.',
+    output: '입력 문서셋 및 전처리 로그',
+  },
+  {
+    id: 'structure',
+    title: '요구사항 구조화',
+    detail: '요구사항, 평가 포인트, 필수 제출항목을 자동 추출해 체크리스트로 변환함.',
+    output: '요구사항 구조화 시트',
+  },
+  {
+    id: 'evidence',
+    title: '근거 연결',
+    detail: '내부 사례/성과지표/전문가 이력 등 근거자료를 요구사항 항목과 매핑함.',
+    output: '근거 매핑 테이블',
+  },
+  {
+    id: 'draft',
+    title: '초안 생성',
+    detail: '구조화된 요구사항과 근거를 바탕으로 제출 형식에 맞는 초안을 자동 생성함.',
+    output: '제안서 초안(PDF/PPT/문서)',
+  },
+  {
+    id: 'verify',
+    title: '검증 리포트',
+    detail: '누락·형식·근거 인용 상태를 자동 점검하고 수정 포인트를 리포트로 제공함.',
+    output: '검증 리포트',
+  },
+  {
+    id: 'review',
+    title: '사용자 검토',
+    detail: '담당자가 수정 포인트를 반영해 최종본을 확정하고 결과 로그를 저장함.',
+    output: '최종 제출본 및 개선 로그',
+  },
+]
+
+const bxGanttPlan = [
+  { task: '기능 범위 확정', start: 5, duration: 1, period: '2026.05' },
+  { task: 'Beta 개발·고도화', start: 6, duration: 3, period: '2026.06~08' },
+  { task: '외부 실증 1차', start: 7, duration: 2, period: '2026.07~08' },
+  { task: '피드백 반영', start: 8, duration: 2, period: '2026.08~09' },
+  { task: '외부 실증 2차', start: 9, duration: 2, period: '2026.09~10' },
+  { task: '결과보고·사업화 정리', start: 11, duration: 2, period: '2026.11~12' },
 ]
 
 const bxMilestonePlan = [
-  { month: '5월', 개발: 2, 검증: 1, 누적완료율: 12 },
-  { month: '6월', 개발: 3, 검증: 1, 누적완료율: 24 },
-  { month: '7월', 개발: 3, 검증: 2, 누적완료율: 39 },
-  { month: '8월', 개발: 2, 검증: 2, 누적완료율: 53 },
-  { month: '9월', 개발: 2, 검증: 3, 누적완료율: 67 },
-  { month: '10월', 개발: 2, 검증: 3, 누적완료율: 81 },
-  { month: '11월', 개발: 1, 검증: 3, 누적완료율: 91 },
-  { month: '12월', 개발: 1, 검증: 2, 누적완료율: 100 },
+  { month: '5월', 개발: 2, 검증: 0, 누적완료율: 10 },
+  { month: '6월', 개발: 3, 검증: 1, 누적완료율: 22 },
+  { month: '7월', 개발: 3, 검증: 2, 누적완료율: 38 },
+  { month: '8월', 개발: 3, 검증: 3, 누적완료율: 55 },
+  { month: '9월', 개발: 2, 검증: 3, 누적완료율: 70 },
+  { month: '10월', 개발: 1, 검증: 3, 누적완료율: 83 },
+  { month: '11월', 개발: 1, 검증: 3, 누적완료율: 92 },
+  { month: '12월', 개발: 0, 검증: 2, 누적완료율: 100 },
 ]
 
 const bxFundingFrame = [
-  { item: '정부지원금(총사업비 대비)', value: 70 },
-  { item: '자기부담금(총사업비 대비)', value: 30 },
-  { item: '자기부담 현금(총사업비 대비)', value: 10 },
-  { item: '자기부담 현물(총사업비 대비)', value: 20 },
+  { item: '정부지원금(총사업비 대비)', value: bxGovRatio },
+  { item: '자기부담금(총사업비 대비)', value: bxSelfRatio },
+  { item: '자기부담 현금(총사업비 대비)', value: bxCashRatio },
+  { item: '자기부담 현물(총사업비 대비)', value: bxInKindRatio },
 ]
 
-const bxTargetTrend = [
-  { year: '2026', sales: 11, customers: 40, performance: 92 },
-  { year: '2027', sales: 30, customers: 100, performance: 95 },
-  { year: '2028', sales: 100, customers: 220, performance: 97 },
+const bxBudgetAmount = [
+  { item: '정부지원', value: bxBudgetPlan.gov },
+  { item: '자부담 현금', value: bxBudgetPlan.cash },
+  { item: '자부담 현물', value: bxBudgetPlan.inKind },
+  { item: '자부담 합계', value: bxSelfAmount },
+]
+
+const bxGoalComparison = [
+  { metric: '실증 고객(개사)', baseline: 0, target: 2 },
+  { metric: '실증 문서(건)', baseline: 0, target: 10 },
+  { metric: '초안 시간(분)', baseline: 180, target: 20 },
+  { metric: '수정 라운드(회)', baseline: 6, target: 3 },
+  { metric: '근거 인용률(%)', baseline: 20, target: 70 },
 ]
 
 const bxFinalChecklist: BxChecklistItem[] = [
-  { item: '양식 변경/삭제 없이 작성', criterion: '양식 표/순서/항목 그대로 유지' },
-  { item: '목차 페이지 삭제', criterion: '제출본에서 목차 페이지 삭제 확인' },
-  { item: '파란 안내문구 삭제', criterion: '안내문구 제거 후 검정 텍스트로 정리' },
-  { item: '개인정보 마스킹 준수', criterion: '이름/생년/학교/직장 유추정보 비식별 처리' },
-  { item: '공고 고정값 일치', criterion: '535개사, 최대1억/평균5천만, 협약 2026.5~12 표기 일치' },
-  { item: '기업 기본값 일치', criterion: '설립일 2025-08-12 및 지원 자격 문구 전 페이지 동일' },
-  { item: '가정 수치 구분 표기', criterion: '불확실 수치는 “가정”으로 명시하고 확정 수치와 분리' },
-  { item: '협약기간 산출물 완료기준 명시', criterion: '산출물별 Definition of Done 작성' },
-  { item: '예산-KPI 1:1 연결', criterion: '집행항목마다 대응 KPI/성과지표 부착' },
-  { item: 'Problem-Solution-Scale-up-Team 논리 일관성', criterion: '서로 모순되는 수치/문구 없음' },
+  { item: '양식 순서 유지', criterion: '일반현황→개요→Problem→Solution→Scale-up→Team 순서 유지' },
+  { item: '개인정보 비노출', criterion: '이름/생년/학교/직장 식별정보 제거, 직책·역할만 표기' },
+  { item: '수치 정합성', criterion: '10건/50회, 3시간→5분, 6→2, 3→0, 20%→80% 수치 일치' },
+  {
+    item: '예산 비율 준수',
+    criterion: `총 143백만원 기준 정부 ${bxGovRatio}% / 자기 ${bxSelfRatio}% / 현금 ${bxCashRatio}% / 현물 ${bxInKindRatio}%`,
+  },
+  { item: '협약기간 목표 명시', criterion: 'Beta v1.0 1식, PoC 보고서 2건, 성과리포트 1부 완료기준 기재' },
+  { item: '실증 KPI 명시', criterion: '실증고객 2개사, 실증문서 10건+, 누락 0개, 인용률 70%+ 목표 기재' },
+  { item: '근거 문서 연결', criterion: '각 핵심 문장에 테스트 로그/실증계획/예산표 근거 연결' },
+  { item: '리스크 대응 포함', criterion: '채널의존, 일정지연, 품질변동, 보안이슈 대응 문구 포함' },
 ]
 
 const bxSources: SourceDoc[] = [
   {
-    title: '2026년도 초기창업패키지(딥테크 특화형) 사업계획서_BX컨설팅_v4 (NotebookLM 업로드본)',
-    org: 'BX컨설팅 내부 작성본',
+    title: '사용자 제공 제출용 Draft AI 사업계획서 원문(2026-03-10)',
+    org: 'BX컨설팅 제출 초안',
     year: '2026',
     url: bxNotebookUrl,
-    usedFor: '일반현황, 문제지표(132건, 73/37), 5종 에이전트, 기존 예산 구조 및 팀/파트너 원문 반영',
+    usedFor: '일반현황, 테스트 수치(10건/50회), 예산(100/15/28/143), 실증 목표 및 일정 반영',
   },
   {
-    title: 'NotebookLM 질의 로그(Session e03b2126, 2026-03-04)',
+    title: 'NotebookLM 질의 로그(Session e03b2126)',
     org: 'NotebookLM / BX컨설팅 APPLY PROJECT',
     year: '2026',
     url: bxNotebookUrl,
-    usedFor: 'v4 원문 정합 검증, 시장진입 전략, 3개년 목표지표(11/30/100) 교차확인',
+    usedFor: '기존 리서치 근거와 제출 원문의 정합 검증, 섹션별 근거 연결',
   },
   {
     title: '2026 창업중심대학 지역기반 (예비)창업기업 사업계획서 양식(별첨1)',
     org: '창업중심대학 운영기관',
     year: '2026',
     url: bxNotebookUrl,
-    usedFor: '양식 구조, 작성 제한사항(목차 삭제/분량/안내문구 삭제/마스킹) 반영',
+    usedFor: '목차 구조, 제출 제한사항, 마스킹 기준 적용',
   },
   {
     title: '2026 창업중심대학 지역기반 모집공고',
     org: '중소벤처기업부/창업진흥원',
     year: '2026',
     url: bxNotebookUrl,
-    usedFor: '지원규모 535개사, 최대1억/평균5천만, 협약기간 8개월 반영',
-  },
-  {
-    title: 'Draft AI 2026-2028 중장기 로드맵(NotebookLM 응답)',
-    org: 'BX컨설팅 내부 전략자료',
-    year: '2026',
-    url: bxNotebookUrl,
-    usedFor: '매출목표 11/30/100억, 2026~2028 연차별 추진계획 반영',
-  },
-  {
-    title: 'Draft AI 2026-2027 통합 경영전략(NotebookLM 응답)',
-    org: 'BX컨설팅 내부 전략자료',
-    year: '2026',
-    url: bxNotebookUrl,
-    usedFor: '매출 11억/30억, 지식허브 1,000건+, 성능 95% 목표 반영',
-  },
-  {
-    title: '나라장터 공공조달 제안서 PoC 검토(NotebookLM 응답)',
-    org: 'BX컨설팅 실증 검토자료',
-    year: '2026',
-    url: bxNotebookUrl,
-    usedFor: '공공조달 진입전략과 PoC 기반 사업화 단계 반영',
+    usedFor: '사업화자금 상한(정부지원 1억원), 협약기간(2026.05~12) 및 비율 기준 확인',
   },
   {
     title: 'K-Startup 공식 포털',
     org: '중소벤처기업부 / 창업진흥원',
     year: '2026',
     url: 'https://www.k-startup.go.kr/',
-    usedFor: '최종 공고 확인 및 제출 채널 검증',
+    usedFor: '최종 공고값·제출 채널 확인',
   },
 ]
 
@@ -1105,6 +1207,43 @@ function SamhwaView({ onBack }: { onBack: () => void }) {
 }
 
 function BxView({ onBack }: { onBack: () => void }) {
+  const [selectedKpiId, setSelectedKpiId] = useState('draft-time')
+  const [activeWorkflowId, setActiveWorkflowId] = useState('input')
+
+  const activeKpi = useMemo(
+    () => bxKpiComparison.find((item) => item.id === selectedKpiId) ?? bxKpiComparison[0],
+    [selectedKpiId],
+  )
+
+  const activeWorkflow = useMemo(
+    () => bxWorkflowSteps.find((item) => item.id === activeWorkflowId) ?? bxWorkflowSteps[0],
+    [activeWorkflowId],
+  )
+
+  const kpiChartData = useMemo(
+    () => [
+      {
+        category: activeKpi.label,
+        수작업: activeKpi.before,
+        'Draft AI': activeKpi.after,
+        협약목표: activeKpi.target,
+      },
+    ],
+    [activeKpi],
+  )
+
+  const kpiDeltaText = useMemo(() => {
+    if (activeKpi.before <= 0) {
+      return '기준값 없음'
+    }
+    const diff =
+      activeKpi.better === 'lower'
+        ? ((activeKpi.before - activeKpi.after) / activeKpi.before) * 100
+        : ((activeKpi.after - activeKpi.before) / activeKpi.before) * 100
+
+    return `${diff.toFixed(1)}% ${activeKpi.better === 'lower' ? '개선' : '상승'}`
+  }, [activeKpi])
+
   return (
     <>
       <section className="top-nav">
@@ -1124,8 +1263,9 @@ function BxView({ onBack }: { onBack: () => void }) {
           확정 문안을 배치했고, 하단 차트와 체크리스트는 내부 검토용 참고 부록으로 분리했습니다.
         </p>
         <div className="notice-box">
-          정부지원금은 공고 상한인 100백만원(1억원)으로 고정하고, 총사업비 145백만원(정부 68.9%, 자기 31.1%,
-          현금 20/현물 25)으로 비율 기준을 충족했습니다. 제출 직전 최종 공고와 수치 일치 여부를 재확인해야 합니다.
+          정부지원금은 공고 상한인 100백만원(1억원)으로 고정하고, 총사업비 143백만원(정부 {bxGovRatio}%, 자기{' '}
+          {bxSelfRatio}%, 현금 {bxBudgetPlan.cash} / 현물 {bxBudgetPlan.inKind})으로 비율 기준을 충족했습니다.
+          제출 직전 최종 공고와 수치 일치 여부를 재확인해야 합니다.
           {bxNotebookQueryMeta}
         </div>
       </section>
@@ -1138,6 +1278,69 @@ function BxView({ onBack }: { onBack: () => void }) {
           아래 섹션은 실제 제출 문안 기준으로 작성되었습니다. 본문은 지시형 문구를 제외하고 현재 상태, 실행 항목, 정량
           목표 중심으로만 구성했습니다.
         </p>
+      </section>
+
+      <section className="panel">
+        <div className="panel-header">
+          <h2>핵심 시각 자료(인터랙티브)</h2>
+        </div>
+        <div className="visual-grid">
+          <article className="visual-card">
+            <h3>내부 테스트 성과 비교(수작업 vs Draft AI)</h3>
+            <div className="chip-row">
+              {bxKpiComparison.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`chip-btn${item.id === selectedKpiId ? ' active' : ''}`}
+                  onClick={() => setSelectedKpiId(item.id)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+            <div className="chart-wrap short">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={kpiChartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#2a3c4f" />
+                  <XAxis dataKey="category" stroke="#a9bed1" />
+                  <YAxis stroke="#a9bed1" />
+                  <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}${activeKpi.unit}`} />
+                  <Legend />
+                  <Bar dataKey="수작업" fill="#f08a71" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="Draft AI" fill="#65d5ce" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="협약목표" fill="#f4b64b" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <p className="chart-note">
+              현재 선택 지표: {activeKpi.label} | 개선폭: {kpiDeltaText} | 기준: {activeKpi.note}
+            </p>
+          </article>
+
+          <article className="visual-card">
+            <h3>Draft AI 서비스 개요도(인터랙티브)</h3>
+            <div className="workflow-rail">
+              {bxWorkflowSteps.map((step, idx) => (
+                <button
+                  key={step.id}
+                  type="button"
+                  className={`wf-node${step.id === activeWorkflowId ? ' active' : ''}`}
+                  onClick={() => setActiveWorkflowId(step.id)}
+                  aria-pressed={step.id === activeWorkflowId}
+                >
+                  <span>{idx + 1}</span>
+                  <strong>{step.title}</strong>
+                </button>
+              ))}
+            </div>
+            <div className="workflow-detail">
+              <h4>{activeWorkflow.title}</h4>
+              <p>{activeWorkflow.detail}</p>
+              <small>출력물: {activeWorkflow.output}</small>
+            </div>
+          </article>
+        </div>
       </section>
 
       <section className="panel">
@@ -1203,6 +1406,37 @@ function BxView({ onBack }: { onBack: () => void }) {
         </p>
       </section>
 
+      <section className="panel">
+        <div className="panel-header">
+          <h2>협약기간 간트차트(2026.05~12)</h2>
+        </div>
+        <div className="chart-wrap tall">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={bxGanttPlan} layout="vertical" margin={{ left: 6, right: 16 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#2a3c4f" />
+              <XAxis
+                type="number"
+                stroke="#a9bed1"
+                domain={[5, 12]}
+                ticks={[5, 6, 7, 8, 9, 10, 11, 12]}
+                tickFormatter={(value) => `${value}월`}
+              />
+              <YAxis dataKey="task" type="category" stroke="#a9bed1" width={170} />
+              <Tooltip
+                formatter={(value, name, item) =>
+                  name === '기간'
+                    ? `${value ?? 0}개월 (${((item?.payload as { period?: string } | undefined)?.period ?? '-')})`
+                    : ''
+                }
+              />
+              <Bar dataKey="start" stackId="gantt" fill="rgba(0,0,0,0)" legendType="none" />
+              <Bar dataKey="duration" stackId="gantt" fill="#f4b64b" name="기간" radius={[0, 8, 8, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <p className="chart-note">주: 막대 길이는 개월 수, 툴팁은 상세 기간(연월)을 표시함.</p>
+      </section>
+
       <section className="panel two-col">
         <div>
           <div className="panel-header">
@@ -1223,16 +1457,17 @@ function BxView({ onBack }: { onBack: () => void }) {
 
         <div>
           <div className="panel-header">
-            <h2>평가항목 대응도(Radar)</h2>
+            <h2>총사업비 구성(금액, 백만원)</h2>
           </div>
           <div className="chart-wrap">
             <ResponsiveContainer width="100%" height="100%">
-              <RadarChart data={bxEvaluationRadar}>
-                <PolarGrid stroke="#385068" />
-                <PolarAngleAxis dataKey="axis" stroke="#a9bed1" fontSize={11} />
-                <PolarRadiusAxis domain={[0, 100]} stroke="#6e879c" />
-                <Radar name="대응도 점수" dataKey="score" stroke="#65d5ce" fill="#65d5ce" fillOpacity={0.35} />
-              </RadarChart>
+              <BarChart data={bxBudgetAmount}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#2a3c4f" />
+                <XAxis dataKey="item" stroke="#a9bed1" />
+                <YAxis stroke="#a9bed1" unit="백만원" />
+                <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}백만원`} />
+                <Bar dataKey="value" fill="#9bc1ff" radius={[6, 6, 0, 0]} />
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
@@ -1278,26 +1513,23 @@ function BxView({ onBack }: { onBack: () => void }) {
 
       <section className="panel">
         <div className="panel-header">
-          <h2>2026~2028 목표지표 추이(Line)</h2>
+          <h2>실증 KPI 목표 비교(현재 vs 협약 목표)</h2>
         </div>
         <div className="chart-wrap">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={bxTargetTrend}>
+            <BarChart data={bxGoalComparison} layout="vertical" margin={{ left: 4, right: 18 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#2a3c4f" />
-              <XAxis dataKey="year" stroke="#a9bed1" />
-              <YAxis yAxisId="left" stroke="#a9bed1" />
-              <YAxis yAxisId="right" orientation="right" stroke="#a9bed1" />
-              <Tooltip />
+              <XAxis type="number" stroke="#a9bed1" />
+              <YAxis dataKey="metric" type="category" stroke="#a9bed1" width={140} />
+              <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}`} />
               <Legend />
-              <Line yAxisId="left" type="monotone" dataKey="sales" name="매출목표(억원)" stroke="#65d5ce" strokeWidth={2.6} />
-              <Line yAxisId="left" type="monotone" dataKey="customers" name="유료고객(개사)" stroke="#f4b64b" strokeWidth={2.4} />
-              <Line yAxisId="right" type="monotone" dataKey="performance" name="에이전트 성능(%)" stroke="#9bc1ff" strokeWidth={2.4} />
-            </LineChart>
+              <Bar dataKey="baseline" name="현재" fill="#f08a71" radius={[0, 6, 6, 0]} />
+              <Bar dataKey="target" name="협약목표" fill="#65d5ce" radius={[0, 6, 6, 0]} />
+            </BarChart>
           </ResponsiveContainer>
         </div>
         <p className="chart-note">
-          주: 유료고객(2026/2028), 성능(2026/2028) 수치는 운영 가정이며, 2027년 기준값(유료고객 100개사, 성능 95%)
-          과 연동해 설정함.
+          주: 단위가 서로 다른 지표는 절대 비교가 아닌 목표 방향성 확인 용도로 사용함.
         </p>
       </section>
 
@@ -1324,16 +1556,16 @@ function BxView({ onBack }: { onBack: () => void }) {
           </div>
           <div className="decision-box expanded">
             <p>
-              1. <strong>문제정의:</strong> 연간 132건 수작업과 73/37 격차 지표를 기준 문제값으로 확정함.
+              1. <strong>문제정의:</strong> 민간 제안서 10건, 50회 테스트에서 문서 병목을 수치로 확인함.
             </p>
             <p>
-              2. <strong>실행경로:</strong> 2026년 SI 레퍼런스 확보 후 2027년 SaaS 전환을 본 전략으로 채택함.
+              2. <strong>실행경로:</strong> 2026.05~12 Beta v1.0 완성과 외부 실증 2건을 우선 달성함.
             </p>
             <p>
-              3. <strong>재무목표:</strong> 매출 11억(2026) → 30억(2027) → 100억(2028) 목표를 반영함.
+              3. <strong>예산원칙:</strong> 총 143백만원 기준 정부 {bxGovRatio}% / 자기 {bxSelfRatio}%로 비율을 준수함.
             </p>
             <p>
-              4. <strong>운영원칙:</strong> 확정 수치와 가정 수치를 분리 표기하고, 근거 문서와 1:1로 연결함.
+              4. <strong>운영원칙:</strong> 이름 비노출 원칙을 유지하고 수치·근거·산출물을 1:1로 연결함.
             </p>
           </div>
         </div>
