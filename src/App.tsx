@@ -1255,7 +1255,7 @@ function SamhwaView({ onBack }: { onBack: () => void }) {
         <div className="panel-header">
           <h2>의사결정 매트릭스(5점 척도)</h2>
         </div>
-        <div className="table-wrap">
+        <div className="table-wrap tight">
           <table>
             <thead>
               <tr>
@@ -1474,7 +1474,7 @@ function BxView({ onBack }: { onBack: () => void }) {
           <div className="panel-header">
             <h2>검증 리포트 모의 샘플</h2>
           </div>
-          <div className="table-wrap">
+          <div className="table-wrap tight">
             <table>
               <thead>
                 <tr>
@@ -1584,7 +1584,7 @@ function BxView({ onBack }: { onBack: () => void }) {
           <div className="panel-header">
             <h2>3-3 자금 운용 | 예산 → KPI 매핑</h2>
           </div>
-          <div className="table-wrap">
+          <div className="table-wrap tight">
             <table>
               <thead>
                 <tr>

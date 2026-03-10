@@ -910,6 +910,21 @@ a {
   overflow: auto;
 }
 
+.table-wrap.tight {
+  overflow-x: hidden;
+}
+
+.table-wrap.tight table {
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.table-wrap.tight th,
+.table-wrap.tight td {
+  white-space: normal;
+  word-break: keep-all;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
