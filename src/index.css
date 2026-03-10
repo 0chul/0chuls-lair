@@ -434,26 +434,23 @@ a {
   background: rgba(39, 177, 173, 0.2);
 }
 
-.workflow-rail {
+.workflow-expanded {
   margin-top: 10px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
 }
 
-.wf-node {
+.workflow-step-card {
+  position: relative;
   border: 1px solid rgba(54, 87, 111, 0.8);
   border-radius: 10px;
   background: rgba(21, 37, 51, 0.72);
   color: var(--ink-200);
-  padding: 8px;
-  text-align: left;
-  display: grid;
-  gap: 4px;
-  cursor: pointer;
+  padding: 9px;
 }
 
-.wf-node span {
+.workflow-step-card span {
   width: 20px;
   height: 20px;
   border-radius: 999px;
@@ -465,40 +462,33 @@ a {
   background: rgba(39, 177, 173, 0.2);
 }
 
-.wf-node strong {
-  font-size: 12px;
+.workflow-step-card h3 {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #9ef4ed;
 }
 
-.wf-node.active {
-  border-color: rgba(101, 213, 206, 0.8);
-  background: rgba(26, 48, 63, 0.84);
-}
-
-.workflow-detail {
-  margin-top: 10px;
-  border: 1px solid rgba(54, 87, 111, 0.8);
-  border-radius: 10px;
-  background: rgba(21, 37, 51, 0.7);
-  padding: 10px;
-}
-
-.workflow-detail h4 {
-  margin: 0;
-  font-size: 14px;
-}
-
-.workflow-detail p {
-  margin: 6px 0 0;
+.workflow-step-card p {
+  margin: 7px 0 0;
   color: var(--ink-200);
-  font-size: 12.8px;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 1.45;
 }
 
-.workflow-detail small {
+.workflow-step-card small {
   display: block;
   margin-top: 8px;
   color: var(--ink-300);
   font-size: 12px;
+}
+
+.workflow-step-card em {
+  position: absolute;
+  right: -7px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-style: normal;
+  color: #8ce7df;
 }
 
 .gtm-grid {
@@ -963,7 +953,7 @@ td {
   .visual-grid,
   .gtm-grid,
   .risk-matrix,
-  .workflow-rail,
+  .workflow-expanded,
   .mirror-grid,
   .panel.two-col,
   .roadmap {

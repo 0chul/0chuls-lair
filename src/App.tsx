@@ -1296,13 +1296,6 @@ function SamhwaView({ onBack }: { onBack: () => void }) {
 }
 
 function BxView({ onBack }: { onBack: () => void }) {
-  const [activeWorkflowId, setActiveWorkflowId] = useState('rfp')
-
-  const activeWorkflow = useMemo(
-    () => bxWorkflowSteps.find((item) => item.id === activeWorkflowId) ?? bxWorkflowSteps[0],
-    [activeWorkflowId],
-  )
-
   return (
     <>
       <section className="top-nav">
@@ -1434,24 +1427,16 @@ function BxView({ onBack }: { onBack: () => void }) {
         <div className="panel-header">
           <h2>2-2 실현 및 고도화 방안 | 업무 흐름 다이어그램</h2>
         </div>
-        <div className="workflow-rail">
+        <div className="workflow-expanded">
           {bxWorkflowSteps.map((step, idx) => (
-            <button
-              key={step.id}
-              type="button"
-              className={`wf-node${step.id === activeWorkflowId ? ' active' : ''}`}
-              onClick={() => setActiveWorkflowId(step.id)}
-              aria-pressed={step.id === activeWorkflowId}
-            >
+            <article key={step.id} className="workflow-step-card">
               <span>{idx + 1}</span>
-              <strong>{step.title}</strong>
-            </button>
+              <h3>{step.title}</h3>
+              <p>{step.detail}</p>
+              <small>산출물: {step.output}</small>
+              {idx < bxWorkflowSteps.length - 1 && <em>→</em>}
+            </article>
           ))}
-        </div>
-        <div className="workflow-detail">
-          <h4>{activeWorkflow.title}</h4>
-          <p>{activeWorkflow.detail}</p>
-          <small>산출물: {activeWorkflow.output}</small>
         </div>
       </section>
 
