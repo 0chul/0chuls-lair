@@ -82,17 +82,6 @@ type BxChecklistItem = {
   criterion: string
 }
 
-type BxKpiItem = {
-  id: string
-  label: string
-  before: number
-  after: number
-  target: number
-  unit: string
-  better: 'lower' | 'higher'
-  note: string
-}
-
 type BxWorkflowStep = {
   id: string
   title: string
@@ -389,6 +378,155 @@ const bxSelfRatio = bxPercent(bxSelfAmount, bxBudgetPlan.total)
 const bxCashRatio = bxPercent(bxBudgetPlan.cash, bxBudgetPlan.total)
 const bxInKindRatio = bxPercent(bxBudgetPlan.inKind, bxBudgetPlan.total)
 
+const bxSummaryInfographic = [
+  {
+    title: 'Problem',
+    tags: ['수작업 병목', '품질 편차', '제출 직전 리스크'],
+    value: '문서업무 재작업 누적',
+  },
+  {
+    title: 'Solution',
+    tags: ['요구사항 구조화', '근거 연결', '검증 리포트'],
+    value: '워크플로우 통합 자동화',
+  },
+  {
+    title: 'Proof',
+    tags: ['3시간→5분', '6회→2회', '3개→0개'],
+    value: '근거 인용률 20→80',
+  },
+  {
+    title: 'GTM',
+    tags: ['트랙A 기존 네트워크', '트랙B 지역 실증', '2트랙 병행'],
+    value: '실증 2건 후 확산',
+  },
+  {
+    title: 'Outputs',
+    tags: ['Beta v1.0 1식', 'PoC 결과보고서 2건', '정량 리포트 1부'],
+    value: '협약기간 산출물 고정',
+  },
+  {
+    title: 'Ask',
+    tags: ['정부 100백만원', '총사업비 143백만원', `정부 ${bxGovRatio}% / 자기 ${bxSelfRatio}%`],
+    value: '비율 기준 충족',
+  },
+]
+
+const bxTestDesignFlow = [
+  { step: '샘플 문서 10건', detail: '민간 제안서 문서셋 구성' },
+  { step: '분해/변형', detail: '섹션·버전·포맷 단위 분해' },
+  { step: '실행/평가 50회', detail: '반복 실행 후 KPI 기록' },
+]
+
+const bxBeforeAfterTime = [
+  { label: '수작업', value: 180 },
+  { label: 'Draft AI', value: 5 },
+  { label: '협약목표', value: 20 },
+]
+
+const bxBeforeAfterRounds = [
+  { label: '수작업', value: 6 },
+  { label: 'Draft AI', value: 2 },
+  { label: '협약목표', value: 3 },
+]
+
+const bxPerformanceTable = [
+  { metric: '초안 작성시간', before: '3시간', after: '5분', target: '20분 이내' },
+  { metric: '수정 라운드', before: '6회', after: '2회', target: '3회 이하' },
+  { metric: '필수항목 누락', before: '3개', after: '0개', target: '0개 유지' },
+  { metric: '근거 인용 포함률', before: '20%', after: '80%', target: '70% 이상' },
+]
+
+const bxQualityChecklist = [
+  '필수항목 누락 여부',
+  '요구사항-본문 정합성',
+  '근거 인용 태깅 존재 여부',
+  '근거와 문장 간 연결성',
+  '금지표현/과장표현 필터링',
+  '형식 규칙(PDF/PPT/문서) 충족',
+  '수치 단위/표기 통일성',
+  '검토 로그 및 수정 이력 기록',
+]
+
+const bxQualityReportMock = [
+  { field: '누락 항목', value: '0건' },
+  { field: '형식 오류', value: '1건(수정 필요)' },
+  { field: '근거 인용률', value: '80%' },
+  { field: '금지표현 탐지', value: '0건' },
+]
+
+const bxGtmTrackA = [
+  '금융권/대기업/공공 실적 접점 확보(1완료+1진행)',
+  'PoC 후보 발굴 및 요구사항 정리',
+  '도입 장벽(보안/승인/표준화) 사전 파악',
+]
+
+const bxGtmTrackB = [
+  '지역 네트워크 기반 실증 고객 2건 모집',
+  '실제 문서 적용 및 KPI 정량 검증',
+  '결과보고서/지표 리포트로 레퍼런스화',
+]
+
+const bxBudgetKpiMap = [
+  {
+    cost: '인건비 75백만원',
+    kpi: '초안시간 단축, 수정 라운드 감소',
+    output: 'Beta 기능 고도화, 실증 운영',
+  },
+  {
+    cost: 'LLM/API/클라우드/데이터 20백만원',
+    kpi: '근거 인용률 상승, 처리 안정성 확보',
+    output: '근거 연결·검증 자동화 기능',
+  },
+  {
+    cost: '외주용역 12백만원',
+    kpi: '출력 형식 오류 최소화',
+    output: 'PDF/PPT 포맷 안정화 모듈',
+  },
+  {
+    cost: '기자재 8백만원',
+    kpi: '실행속도/테스트 처리량 확보',
+    output: '개발·검증 환경 보완',
+  },
+  {
+    cost: '운영비 13백만원',
+    kpi: '실증 2건 수행 및 보고 완료',
+    output: '실증 커뮤니케이션/운영 체계',
+  },
+]
+
+const bxRiskMatrix = [
+  {
+    risk: '실증 고객 모집 지연',
+    impact: '높음',
+    likelihood: '높음',
+    response: '기존 네트워크+지역 채널 동시 모집',
+  },
+  {
+    risk: '성과 재현성 저하',
+    impact: '높음',
+    likelihood: '중간',
+    response: '측정 조건 고정 및 로그 검증',
+  },
+  {
+    risk: '보안 요구 불일치',
+    impact: '높음',
+    likelihood: '중간',
+    response: '사전 보안 체크리스트 운영',
+  },
+  {
+    risk: '데이터 품질 편차',
+    impact: '중간',
+    likelihood: '높음',
+    response: '입력 전처리 규칙 표준화',
+  },
+  {
+    risk: '외주 산출물 지연',
+    impact: '중간',
+    likelihood: '중간',
+    response: '검수 기준·납기 조건 계약 고정',
+  },
+]
+
 const bxFormMirrorSections: BxSectionItem[] = [
   {
     title: '□ 일반현황',
@@ -645,85 +783,36 @@ const bxFormMirrorSections: BxSectionItem[] = [
   },
 ]
 
-const bxKpiComparison: BxKpiItem[] = [
-  {
-    id: 'draft-time',
-    label: '초안 작성시간',
-    before: 180,
-    after: 5,
-    target: 20,
-    unit: '분',
-    better: 'lower',
-    note: '민간 제안서 10건, 50회 테스트 평균',
-  },
-  {
-    id: 'revision-round',
-    label: '수정 라운드',
-    before: 6,
-    after: 2,
-    target: 3,
-    unit: '회',
-    better: 'lower',
-    note: '검토-재수정 반복 횟수 기준',
-  },
-  {
-    id: 'missing-items',
-    label: '필수항목 누락',
-    before: 3,
-    after: 0,
-    target: 0,
-    unit: '개',
-    better: 'lower',
-    note: '제출 직전 체크리스트 기준',
-  },
-  {
-    id: 'citation-rate',
-    label: '근거 인용 포함률',
-    before: 20,
-    after: 80,
-    target: 70,
-    unit: '%',
-    better: 'higher',
-    note: '근거 연결 기능 적용 후 평균',
-  },
-]
-
 const bxWorkflowSteps: BxWorkflowStep[] = [
   {
-    id: 'input',
-    title: '문서 입력',
-    detail: 'RFP, 기존 제안서, 내부 레퍼런스 문서를 업로드하고 처리 가능한 단위로 분해함.',
-    output: '입력 문서셋 및 전처리 로그',
+    id: 'rfp',
+    title: 'RFP 업로드',
+    detail: 'RFP와 내부 레퍼런스 문서를 업로드하고 처리 대상 문서셋을 확정함.',
+    output: '입력 문서셋',
   },
   {
     id: 'structure',
     title: '요구사항 구조화',
     detail: '요구사항, 평가 포인트, 필수 제출항목을 자동 추출해 체크리스트로 변환함.',
-    output: '요구사항 구조화 시트',
+    output: '요구사항 체크리스트',
   },
   {
     id: 'evidence',
     title: '근거 연결',
     detail: '내부 사례/성과지표/전문가 이력 등 근거자료를 요구사항 항목과 매핑함.',
-    output: '근거 매핑 테이블',
+    output: '근거 매핑표',
   },
   {
     id: 'draft',
     title: '초안 생성',
     detail: '구조화된 요구사항과 근거를 바탕으로 제출 형식에 맞는 초안을 자동 생성함.',
-    output: '제안서 초안(PDF/PPT/문서)',
+    output: '제안서 초안',
   },
   {
     id: 'verify',
-    title: '검증 리포트',
-    detail: '누락·형식·근거 인용 상태를 자동 점검하고 수정 포인트를 리포트로 제공함.',
-    output: '검증 리포트',
-  },
-  {
-    id: 'review',
-    title: '사용자 검토',
-    detail: '담당자가 수정 포인트를 반영해 최종본을 확정하고 결과 로그를 저장함.',
-    output: '최종 제출본 및 개선 로그',
+    title: '검증 리포트/산출물',
+    detail: '누락·형식·근거 상태를 점검한 검증 리포트와 PDF/PPT 산출물을 생성함.',
+    output: '검증 리포트 + PDF/PPT',
   },
 ]
 
@@ -1207,42 +1296,12 @@ function SamhwaView({ onBack }: { onBack: () => void }) {
 }
 
 function BxView({ onBack }: { onBack: () => void }) {
-  const [selectedKpiId, setSelectedKpiId] = useState('draft-time')
-  const [activeWorkflowId, setActiveWorkflowId] = useState('input')
-
-  const activeKpi = useMemo(
-    () => bxKpiComparison.find((item) => item.id === selectedKpiId) ?? bxKpiComparison[0],
-    [selectedKpiId],
-  )
+  const [activeWorkflowId, setActiveWorkflowId] = useState('rfp')
 
   const activeWorkflow = useMemo(
     () => bxWorkflowSteps.find((item) => item.id === activeWorkflowId) ?? bxWorkflowSteps[0],
     [activeWorkflowId],
   )
-
-  const kpiChartData = useMemo(
-    () => [
-      {
-        category: activeKpi.label,
-        수작업: activeKpi.before,
-        'Draft AI': activeKpi.after,
-        협약목표: activeKpi.target,
-      },
-    ],
-    [activeKpi],
-  )
-
-  const kpiDeltaText = useMemo(() => {
-    if (activeKpi.before <= 0) {
-      return '기준값 없음'
-    }
-    const diff =
-      activeKpi.better === 'lower'
-        ? ((activeKpi.before - activeKpi.after) / activeKpi.before) * 100
-        : ((activeKpi.after - activeKpi.before) / activeKpi.before) * 100
-
-    return `${diff.toFixed(1)}% ${activeKpi.better === 'lower' ? '개선' : '상승'}`
-  }, [activeKpi])
 
   return (
     <>
@@ -1282,64 +1341,269 @@ function BxView({ onBack }: { onBack: () => void }) {
 
       <section className="panel">
         <div className="panel-header">
-          <h2>핵심 시각 자료(인터랙티브)</h2>
+          <h2>□ 개요(요약) | 1페이지 요약 인포그래픽</h2>
         </div>
-        <div className="visual-grid">
-          <article className="visual-card">
-            <h3>내부 테스트 성과 비교(수작업 vs Draft AI)</h3>
-            <div className="chip-row">
-              {bxKpiComparison.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={`chip-btn${item.id === selectedKpiId ? ' active' : ''}`}
-                  onClick={() => setSelectedKpiId(item.id)}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
+        <div className="infographic-grid">
+          {bxSummaryInfographic.map((card) => (
+            <article key={card.title} className="infographic-card">
+              <h3>{card.title}</h3>
+              <p>{card.value}</p>
+              <div className="chip-row">
+                {card.tags.map((tag) => (
+                  <span key={tag} className="chip-static">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="panel">
+        <div className="panel-header">
+          <h2>2-1 개발/개선 준비현황 | 테스트 설계 및 정량 성과</h2>
+        </div>
+        <div className="test-flow">
+          {bxTestDesignFlow.map((node, idx) => (
+            <article key={node.step} className="test-node">
+              <strong>{node.step}</strong>
+              <span>{node.detail}</span>
+              {idx < bxTestDesignFlow.length - 1 && <em>→</em>}
+            </article>
+          ))}
+        </div>
+        <div className="panel two-col mt12">
+          <div>
+            <h3 className="mini-title">Before/After | 초안 작성시간</h3>
             <div className="chart-wrap short">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={kpiChartData}>
+                <BarChart data={bxBeforeAfterTime}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#2a3c4f" />
-                  <XAxis dataKey="category" stroke="#a9bed1" />
-                  <YAxis stroke="#a9bed1" />
-                  <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}${activeKpi.unit}`} />
-                  <Legend />
-                  <Bar dataKey="수작업" fill="#f08a71" radius={[6, 6, 0, 0]} />
-                  <Bar dataKey="Draft AI" fill="#65d5ce" radius={[6, 6, 0, 0]} />
-                  <Bar dataKey="협약목표" fill="#f4b64b" radius={[6, 6, 0, 0]} />
+                  <XAxis dataKey="label" stroke="#a9bed1" />
+                  <YAxis stroke="#a9bed1" unit="분" />
+                  <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}분`} />
+                  <Bar dataKey="value" fill="#65d5ce" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <p className="chart-note">
-              현재 선택 지표: {activeKpi.label} | 개선폭: {kpiDeltaText} | 기준: {activeKpi.note}
-            </p>
-          </article>
-
-          <article className="visual-card">
-            <h3>Draft AI 서비스 개요도(인터랙티브)</h3>
-            <div className="workflow-rail">
-              {bxWorkflowSteps.map((step, idx) => (
-                <button
-                  key={step.id}
-                  type="button"
-                  className={`wf-node${step.id === activeWorkflowId ? ' active' : ''}`}
-                  onClick={() => setActiveWorkflowId(step.id)}
-                  aria-pressed={step.id === activeWorkflowId}
-                >
-                  <span>{idx + 1}</span>
-                  <strong>{step.title}</strong>
-                </button>
+          </div>
+          <div>
+            <h3 className="mini-title">Before/After | 수정 라운드</h3>
+            <div className="chart-wrap short">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={bxBeforeAfterRounds}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#2a3c4f" />
+                  <XAxis dataKey="label" stroke="#a9bed1" />
+                  <YAxis stroke="#a9bed1" unit="회" />
+                  <Tooltip formatter={(v: number | string | undefined) => `${v ?? 0}회`} />
+                  <Bar dataKey="value" fill="#f4b64b" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>지표</th>
+                <th>Before</th>
+                <th>After</th>
+                <th>협약 목표</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bxPerformanceTable.map((row) => (
+                <tr key={row.metric}>
+                  <td>{row.metric}</td>
+                  <td>{row.before}</td>
+                  <td>{row.after}</td>
+                  <td>{row.target}</td>
+                </tr>
               ))}
-            </div>
-            <div className="workflow-detail">
-              <h4>{activeWorkflow.title}</h4>
-              <p>{activeWorkflow.detail}</p>
-              <small>출력물: {activeWorkflow.output}</small>
-            </div>
+            </tbody>
+          </table>
+        </div>
+        <p className="chart-note">
+          측정 조건: 민간 제안서 10건, 총 50회 테스트 케이스, 기간 2025.11~2026.03, 평균값 기준.
+        </p>
+      </section>
+
+      <section className="panel">
+        <div className="panel-header">
+          <h2>2-2 실현 및 고도화 방안 | 업무 흐름 다이어그램</h2>
+        </div>
+        <div className="workflow-rail">
+          {bxWorkflowSteps.map((step, idx) => (
+            <button
+              key={step.id}
+              type="button"
+              className={`wf-node${step.id === activeWorkflowId ? ' active' : ''}`}
+              onClick={() => setActiveWorkflowId(step.id)}
+              aria-pressed={step.id === activeWorkflowId}
+            >
+              <span>{idx + 1}</span>
+              <strong>{step.title}</strong>
+            </button>
+          ))}
+        </div>
+        <div className="workflow-detail">
+          <h4>{activeWorkflow.title}</h4>
+          <p>{activeWorkflow.detail}</p>
+          <small>산출물: {activeWorkflow.output}</small>
+        </div>
+      </section>
+
+      <section className="panel two-col">
+        <div>
+          <div className="panel-header">
+            <h2>2-2 품질 통제 | 체크리스트 기반 검증</h2>
+          </div>
+          <ul className="fit-list">
+            {bxQualityChecklist.map((item) => (
+              <li key={item}>
+                <div>
+                  <strong>{item}</strong>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <div className="panel-header">
+            <h2>검증 리포트 모의 샘플</h2>
+          </div>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>항목</th>
+                  <th>결과</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bxQualityReportMock.map((row) => (
+                  <tr key={row.field}>
+                    <td>{row.field}</td>
+                    <td>{row.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="chart-note">주의: 결과는 예시이며 실제 실증 데이터로 재검증 후 제출본에 반영함.</p>
+        </div>
+      </section>
+
+      <section className="panel">
+        <div className="panel-header">
+          <h2>3-2 시장 진입 전략 | 2트랙 GTM 구조도</h2>
+        </div>
+        <div className="gtm-grid">
+          <article className="gtm-lane">
+            <h3>트랙 A | 기존 실적 기반 부싯돌</h3>
+            <ol className="ordered-list">
+              {bxGtmTrackA.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ol>
           </article>
+          <article className="gtm-lane">
+            <h3>트랙 B | 지역기반 실증 엔진</h3>
+            <ol className="ordered-list">
+              {bxGtmTrackB.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ol>
+          </article>
+          <div className="gtm-merge">
+            <strong>합류 지점</strong>
+            <p>실증 2건 + 결과보고서 + 정량 리포트로 도입 표준안을 확정하고 전국 확산 채널로 전개함.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="panel two-col">
+        <div>
+          <div className="panel-header">
+            <h2>2-2/3-3 리스크 매트릭스(영향×발생)</h2>
+          </div>
+          <div className="risk-matrix">
+            <article className="risk-cell">
+              <h4>영향 높음 · 발생 높음</h4>
+              <ul>
+                {bxRiskMatrix
+                  .filter((item) => item.impact === '높음' && item.likelihood === '높음')
+                  .map((item) => (
+                    <li key={item.risk}>
+                      {item.risk} - {item.response}
+                    </li>
+                  ))}
+              </ul>
+            </article>
+            <article className="risk-cell">
+              <h4>영향 높음 · 발생 중간/낮음</h4>
+              <ul>
+                {bxRiskMatrix
+                  .filter((item) => item.impact === '높음' && item.likelihood !== '높음')
+                  .map((item) => (
+                    <li key={item.risk}>
+                      {item.risk} - {item.response}
+                    </li>
+                  ))}
+              </ul>
+            </article>
+            <article className="risk-cell">
+              <h4>영향 중간/낮음 · 발생 높음</h4>
+              <ul>
+                {bxRiskMatrix
+                  .filter((item) => item.impact !== '높음' && item.likelihood === '높음')
+                  .map((item) => (
+                    <li key={item.risk}>
+                      {item.risk} - {item.response}
+                    </li>
+                  ))}
+              </ul>
+            </article>
+            <article className="risk-cell">
+              <h4>영향 중간/낮음 · 발생 중간/낮음</h4>
+              <ul>
+                {bxRiskMatrix
+                  .filter((item) => item.impact !== '높음' && item.likelihood !== '높음')
+                  .map((item) => (
+                    <li key={item.risk}>
+                      {item.risk} - {item.response}
+                    </li>
+                  ))}
+              </ul>
+            </article>
+          </div>
+        </div>
+        <div>
+          <div className="panel-header">
+            <h2>3-3 자금 운용 | 예산 → KPI 매핑</h2>
+          </div>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>비용 항목</th>
+                  <th>연결 KPI</th>
+                  <th>산출물</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bxBudgetKpiMap.map((row) => (
+                  <tr key={row.cost}>
+                    <td>{row.cost}</td>
+                    <td>{row.kpi}</td>
+                    <td>{row.output}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 

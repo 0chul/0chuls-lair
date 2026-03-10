@@ -259,6 +259,43 @@ a {
   line-height: 1.45;
 }
 
+.infographic-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.infographic-card {
+  border: 1px solid rgba(60, 95, 120, 0.86);
+  border-radius: 12px;
+  padding: 12px;
+  background: linear-gradient(160deg, rgba(16, 30, 43, 0.92), rgba(15, 26, 37, 0.78));
+}
+
+.infographic-card h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #9ef4ed;
+}
+
+.infographic-card p {
+  margin: 8px 0 0;
+  color: var(--ink-100);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.chip-static {
+  display: inline-flex;
+  border: 1px solid rgba(54, 87, 111, 0.8);
+  border-radius: 999px;
+  background: rgba(21, 37, 51, 0.7);
+  color: var(--ink-200);
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
 .notice-box {
   margin-top: 14px;
   border: 1px solid rgba(244, 182, 75, 0.52);
@@ -329,6 +366,49 @@ a {
 .visual-card h3 {
   margin: 0;
   font-size: 14px;
+}
+
+.test-flow {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.test-node {
+  position: relative;
+  border: 1px solid rgba(60, 95, 120, 0.86);
+  border-radius: 10px;
+  background: rgba(20, 34, 46, 0.8);
+  padding: 10px;
+  display: grid;
+  gap: 6px;
+}
+
+.test-node strong {
+  font-size: 13px;
+  color: var(--ink-100);
+}
+
+.test-node span {
+  color: var(--ink-200);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.test-node em {
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-style: normal;
+  color: #8ce7df;
+}
+
+.mini-title {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-200);
 }
 
 .chip-row {
@@ -419,6 +499,76 @@ a {
   margin-top: 8px;
   color: var(--ink-300);
   font-size: 12px;
+}
+
+.gtm-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.gtm-lane {
+  border: 1px solid rgba(60, 95, 120, 0.86);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(16, 30, 43, 0.86);
+}
+
+.gtm-lane h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #9ef4ed;
+}
+
+.gtm-merge {
+  grid-column: 1 / -1;
+  border: 1px solid rgba(101, 213, 206, 0.5);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(20, 42, 52, 0.72);
+}
+
+.gtm-merge strong {
+  color: #9ef4ed;
+  font-size: 13px;
+}
+
+.gtm-merge p {
+  margin: 6px 0 0;
+  color: var(--ink-200);
+  font-size: 13px;
+  line-height: 1.52;
+}
+
+.risk-matrix {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.risk-cell {
+  border: 1px solid rgba(240, 138, 113, 0.42);
+  border-radius: 10px;
+  background: rgba(47, 30, 28, 0.36);
+  padding: 9px;
+}
+
+.risk-cell h4 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: #f8c0af;
+}
+
+.risk-cell ul {
+  margin: 0;
+  padding-left: 16px;
+  color: var(--ink-200);
+  font-size: 12px;
+  line-height: 1.45;
+  display: grid;
+  gap: 4px;
 }
 
 .premise-grid {
@@ -788,12 +938,16 @@ td {
 @media (max-width: 1080px) {
   .list-grid,
   .summary-grid,
+  .infographic-grid,
+  .test-flow,
   .detail-grid,
   .metric-inline,
   .detail-columns,
   .premise-grid,
   .exec-columns,
   .visual-grid,
+  .gtm-grid,
+  .risk-matrix,
   .workflow-rail,
   .mirror-grid,
   .panel.two-col,
