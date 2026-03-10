@@ -637,6 +637,60 @@ a {
   gap: 4px;
 }
 
+.full-submission-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.raw-submission-box {
+  margin-top: 10px;
+  border: 1px solid rgba(60, 95, 120, 0.86);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(10, 21, 33, 0.88);
+}
+
+.raw-submission-box h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #9ef4ed;
+}
+
+.raw-submission-box pre {
+  margin: 10px 0 0;
+  white-space: pre-wrap;
+  word-break: keep-all;
+  line-height: 1.6;
+  color: var(--ink-200);
+  font-size: 13px;
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+}
+
+.full-submission-card {
+  border: 1px solid rgba(60, 95, 120, 0.86);
+  border-radius: 12px;
+  padding: 12px;
+  background: linear-gradient(160deg, rgba(16, 30, 43, 0.92), rgba(15, 26, 37, 0.78));
+}
+
+.full-submission-card h3 {
+  margin: 0;
+  font-size: 15px;
+  color: #9ef4ed;
+}
+
+.full-submission-card ul {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: var(--ink-200);
+  font-size: 13px;
+  line-height: 1.6;
+  display: grid;
+  gap: 6px;
+}
+
 .mirror-grid {
   margin-top: 10px;
   display: grid;
