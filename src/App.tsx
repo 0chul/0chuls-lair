@@ -602,6 +602,67 @@ const bxBusinessExpansionRoadmap = [
   },
 ]
 
+const bxFinalOutputGroups = [
+  {
+    group: '단기(협약 기간 내)',
+    rows: [
+      {
+        output: 'Draft AI Beta v1.0 개발',
+        note: '공공입찰형 제품 단계 / RFP 분석, 평가기준 추출, 제안 구조 생성, 근거 연결, 검증 리포트, PDF·PPT 출력 포함',
+        quantity: '1식',
+        due: "~'26.12.31.",
+      },
+      {
+        output: '외부 실증(PoC) 결과보고서 작성',
+        note: '공공입찰형 실증 결과 정리 / 실증 고객 2개사 기준 성과·개선사항·도입조건 정리',
+        quantity: '2건',
+        due: "~'26.12.31.",
+      },
+      {
+        output: '정량 성과 리포트 작성',
+        note: '초안 작성시간, 수정 라운드, 누락률, 근거 인용률 등 핵심 KPI 재현성 검증 보고',
+        quantity: '1부',
+        due: "~'26.12.31.",
+      },
+    ],
+  },
+  {
+    group: '중·장기 최종 산출물',
+    rows: [
+      {
+        output: '공공입찰형 템플릿·지식베이스 확장 패키지',
+        note: 'SI, IT서비스, 컨설팅, 연구용역, 홍보·교육 분야 제안서 구조 자산화',
+        quantity: '1식',
+        due: "~'27.06.30.",
+      },
+      {
+        output: '보안·컴플라이언스 질의서 자동화 모듈',
+        note: '질문·답변형 문서 자동화 단계 / 과거 응답 재활용, 요구사항 검증, 답변 초안 생성 기능 포함',
+        quantity: '1식',
+        due: "~'27.12.31.",
+      },
+      {
+        output: '금융·투자 DDQ 자동화 모듈',
+        note: '실사 문서(DDQ) 및 표준 템플릿 기반 문서 자동화 단계',
+        quantity: '1식',
+        due: "~'28.06.30.",
+      },
+      {
+        output: '산업별 검증 룰셋 및 컴플라이언스 엔진',
+        note: '문서 유형별 필수항목 검증, 금지표현 탐지, 근거 추적, 제출 전 점검 체계 고도화',
+        quantity: '1식',
+        due: "~'28.12.31.",
+      },
+      {
+        output: 'B2B 문서 자동화 플랫폼 확장 버전',
+        note: 'AEC 등 프로젝트 산업 포함 / 요구사항 분석, 문서 생성, 컴플라이언스 검증, 제출 준비 통합 지원',
+        quantity: '1식',
+        due: "~'29.12.31.",
+      },
+    ],
+  },
+]
+
 const bxFullSubmissionSections: BxFullSubmissionSection[] = [
   {
     title: '□ 일반현황',
@@ -2077,6 +2138,39 @@ function BxView({ onBack }: { onBack: () => void }) {
               </p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="panel">
+        <div className="panel-header">
+          <h2>최종 산출물 작성(전체 사업단계)</h2>
+        </div>
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>구분</th>
+                <th>최종 산출물</th>
+                <th>수량</th>
+                <th>완료 일정</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bxFinalOutputGroups.map((group) =>
+                group.rows.map((row, idx) => (
+                  <tr key={`${group.group}-${row.output}`}>
+                    {idx === 0 && <td rowSpan={group.rows.length}>{group.group}</td>}
+                    <td>
+                      <strong>{row.output}</strong>
+                      <div className="table-subnote">{row.note}</div>
+                    </td>
+                    <td>{row.quantity}</td>
+                    <td>{row.due}</td>
+                  </tr>
+                )),
+              )}
+            </tbody>
+          </table>
         </div>
       </section>
 

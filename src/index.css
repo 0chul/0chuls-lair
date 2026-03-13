@@ -1035,6 +1035,13 @@ td {
   line-height: 1.45;
 }
 
+.table-subnote {
+  margin-top: 6px;
+  color: var(--ink-300);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
 @media (max-width: 1080px) {
   .list-grid,
   .summary-grid,
