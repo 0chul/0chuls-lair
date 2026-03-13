@@ -538,6 +538,47 @@ a {
   gap: 8px;
 }
 
+.funding-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.funding-card {
+  border: 1px solid rgba(88, 126, 154, 0.8);
+  border-radius: 12px;
+  padding: 12px;
+  background: linear-gradient(165deg, rgba(12, 27, 40, 0.94), rgba(18, 39, 52, 0.82));
+}
+
+.funding-card span {
+  display: inline-block;
+  margin-bottom: 6px;
+  border: 1px solid rgba(101, 213, 206, 0.35);
+  border-radius: 999px;
+  padding: 3px 8px;
+  color: #9ef4ed;
+  font-size: 11px;
+}
+
+.funding-card h3 {
+  margin: 0;
+  font-size: 15px;
+  color: var(--ink-100);
+}
+
+.funding-card p {
+  margin: 9px 0 0;
+  color: var(--ink-200);
+  font-size: 13px;
+  line-height: 1.56;
+}
+
+.funding-card strong {
+  color: #9ef4ed;
+}
+
 .risk-cell {
   border: 1px solid rgba(240, 138, 113, 0.42);
   border-radius: 10px;
@@ -1005,6 +1046,7 @@ td {
   .premise-grid,
   .exec-columns,
   .visual-grid,
+  .funding-grid,
   .gtm-grid,
   .risk-matrix,
   .workflow-expanded,
