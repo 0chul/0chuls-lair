@@ -663,6 +663,51 @@ const bxFinalOutputGroups = [
   },
 ]
 
+const bxFullStageSchedule = [
+  {
+    order: '1',
+    task: '문제정의 및 MVP 검증',
+    period: '2025.11 ~ 2026.03',
+    detail: '민간 제안서 10건 기반 50회 테스트를 수행하고 초안시간, 수정 라운드, 누락률, 근거 인용률 KPI를 정의함.',
+  },
+  {
+    order: '2',
+    task: '공공입찰형 Beta 설계·고도화',
+    period: '2026.05 ~ 2026.08',
+    detail: 'RFP 분석, 평가기준 추출, 제안 구조 생성, 실적·인력 매핑, 검증 리포트, PDF·PPT 출력 기능을 고도화함.',
+  },
+  {
+    order: '3',
+    task: '공공입찰형 외부 실증 1·2차',
+    period: '2026.07 ~ 2026.10',
+    detail: '실증 고객 2개사를 대상으로 적용 테스트를 수행하고 실증 결과보고서 2건과 KPI 재현성 데이터를 확보함.',
+  },
+  {
+    order: '4',
+    task: '상용화 준비 및 협약 산출물 완료',
+    period: '2026.10 ~ 2026.12',
+    detail: 'Beta v1.0, 정량 성과 리포트, 요금체계, 도입 프로세스, 공공입찰형 템플릿 표준안을 정리함.',
+  },
+  {
+    order: '5',
+    task: '보안·컴플라이언스 질의서 자동화 확장',
+    period: '2027 상반기',
+    detail: '질문·답변형 문서군으로 확장하고 Seed 자금을 연계해 보안 기능, 고객성공 조직, 엔터프라이즈 온보딩 체계를 구축함.',
+  },
+  {
+    order: '6',
+    task: '금융·투자 DDQ 자동화 모듈 확장',
+    period: '2027 하반기 ~ 2028',
+    detail: '실사 문서(DDQ)와 표준 템플릿 기반 문서 자동화를 구현하고 Series A 자금으로 템플릿 엔진과 영업조직을 고도화함.',
+  },
+  {
+    order: '7',
+    task: 'AEC 포함 B2B 문서 자동화 플랫폼 확장',
+    period: '2028 이후',
+    detail: '건설·엔지니어링 등 프로젝트 기반 산업까지 확장해 요구사항 분석, 생성, 검증, 제출 준비를 통합 지원하는 플랫폼으로 발전시킴.',
+  },
+]
+
 const bxFullSubmissionSections: BxFullSubmissionSection[] = [
   {
     title: '□ 일반현황',
@@ -2169,6 +2214,34 @@ function BxView({ onBack }: { onBack: () => void }) {
                   </tr>
                 )),
               )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="panel">
+        <div className="panel-header">
+          <h2>사업 추진 일정(전체 사업단계)</h2>
+        </div>
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>순번</th>
+                <th>추진 내용</th>
+                <th>추진 기간</th>
+                <th>세부 내용</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bxFullStageSchedule.map((row) => (
+                <tr key={row.order}>
+                  <td>{row.order}</td>
+                  <td>{row.task}</td>
+                  <td>{row.period}</td>
+                  <td>{row.detail}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
